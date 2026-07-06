@@ -324,33 +324,68 @@ const DashboardPage = () => {
           )}
         </div>
 
+        {/* SEARCH */}
+        <div className="relative mt-6">
+          <Search
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary"
+          />
+
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search tasks..."
+            className="
+            w-full
+            h-12
+            rounded-2xl
+            border
+            border-slate-200
+            dark:border-slate-700
+            bg-white/80
+            dark:bg-slate-900/80
+            backdrop-blur-xl
+            pl-11
+            pr-4
+            text-sm
+            placeholder:text-slate-400
+            focus:outline-none
+            focus:ring-2
+            focus:ring-primary/20
+            focus:border-primary
+            transition-all
+            shadow-sm
+            "
+          />
+        </div>
+
         {/* VIEW FILTER */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-5">
           {[
             { value: "ALL", label: "All" },
             { value: "ASSIGNED", label: "Assigned" },
             { value: "CREATED", label: "Created" },
             { value: "OVERDUE", label: "Overdue" },
           ].map((filter) => (
-          <button
-            key={filter.value}
-            onClick={() => setView(filter.value as View)}
-            className={`
-              h-10
-              px-5
-              rounded-full
-              font-medium
-              transition-all
-              duration-200
-              ${
-                view === filter.value
-                  ? "bg-primary text-white shadow-md"
-                  : "bg-surface border border-border text-secondary hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700"
-              }
-            `}
-          >
-            {filter.label}
-          </button>
+            <button
+              key={filter.value}
+              onClick={() => setView(filter.value as View)}
+              className={`
+                h-10
+                px-5
+                rounded-full
+                font-medium
+                transition-all
+                duration-200
+                ${
+                  view === filter.value
+                    ? "bg-primary text-white shadow-md"
+                    : "bg-surface border border-border text-secondary hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700"
+                }
+              `}
+            >
+              {filter.label}
+            </button>
           ))}
         </div>
 
