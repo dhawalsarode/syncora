@@ -1,11 +1,19 @@
-import { Pencil, Trash2, User, UserRound } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  CalendarDays,
+  User,
+  UserRound,
+  Flag,
+} from "lucide-react";
+
 import { Task } from "../pages/DashboardPage";
 
 const PRIORITY_COLORS = {
-  LOW: "bg-gray-200 text-gray-800",
-  MEDIUM: "bg-blue-200 text-blue-800",
-  HIGH: "bg-orange-200 text-orange-800",
-  URGENT: "bg-red-200 text-red-800",
+  LOW: "bg-slate-100 text-slate-700",
+  MEDIUM: "bg-blue-100 text-blue-700",
+  HIGH: "bg-orange-100 text-orange-700",
+  URGENT: "bg-red-100 text-red-700",
 };
 
 interface Props {
@@ -22,7 +30,6 @@ export default function TaskCard({
   return (
     <div
       className="
-        w-full
         rounded-2xl
         border
         border-slate-200
@@ -30,74 +37,99 @@ export default function TaskCard({
         bg-white
         dark:bg-slate-800
         shadow-sm
-        hover:shadow-xl
+        hover:shadow-lg
+        hover:-translate-y-1
         transition-all
-        duration-200
+        duration-300
         p-4
       "
     >
-      {/* HEADER */}
+      {/* Header */}
 
-      <div className="flex justify-between items-start">
-        <h3 className="font-semibold text-base truncate">
+      <div className="flex justify-between items-start gap-3">
+        <h3 className="font-semibold text-base leading-tight line-clamp-2">
           {task.title}
         </h3>
 
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-1 shrink-0">
           <button
             onClick={() => onEdit(task)}
-            className="text-blue-500 hover:text-blue-700"
+            className="rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
           >
             <Pencil size={16} />
           </button>
 
           <button
             onClick={() => onDelete(task.id)}
-            className="text-red-500 hover:text-red-700"
+            className="rounded-lg p-2 hover:bg-red-50 dark:hover:bg-red-900/30 transition"
           >
             <Trash2 size={16} />
           </button>
         </div>
       </div>
 
-      {/* DESCRIPTION */}
+      {/* Description */}
 
-      <p className="mt-2 text-sm text-gray-500 line-clamp-2">
+      <p className="mt-3 text-sm text-secondary line-clamp-2">
         {task.description}
       </p>
 
-      {/* USERS */}
+      {/* Users */}
 
-      <div className="mt-4 flex justify-between text-xs">
+      <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
 
-        <div className="flex items-center gap-1">
-          <User size={14} />
-          <span>
+        <div>
+          <div className="flex items-center gap-1 text-secondary">
+            <User size={13} />
+            Assigned
+          </div>
+
+          <div className="mt-1 font-medium">
             {task.assignee?.name ?? "Unassigned"}
-          </span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-1">
-          <UserRound size={14} />
-          <span>{task.creator?.name}</span>
+        <div>
+          <div className="flex items-center gap-1 text-secondary">
+            <UserRound size={13} />
+            Created
+          </div>
+
+          <div className="mt-1 font-medium">
+            {task.creator?.name}
+          </div>
         </div>
 
       </div>
 
-      {/* FOOTER */}
+      {/* Footer */}
 
-      <div className="mt-4 flex justify-between items-center">
+      <div className="mt-5 flex items-center justify-between">
 
         <span
-          className={`px-2 py-1 rounded-md text-xs font-medium ${
-            PRIORITY_COLORS[task.priority]
-          }`}
+          className={`
+            flex
+            items-center
+            gap-1
+            rounded-full
+            px-3
+            py-1
+            text-xs
+            font-semibold
+            ${PRIORITY_COLORS[task.priority]}
+          `}
         >
+          <Flag size={12} />
           {task.priority}
         </span>
 
-        <span className="text-xs text-gray-500">
-          {new Date(task.dueDate).toLocaleDateString()}
+        <span className="flex items-center gap-1 text-xs text-secondary">
+          <CalendarDays size={13} />
+
+          {new Date(task.dueDate).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+          })}
         </span>
 
       </div>

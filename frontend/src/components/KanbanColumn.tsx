@@ -34,30 +34,63 @@ export default function KanbanColumn({
             border
             border-slate-200/70
             dark:border-slate-700/70
-            bg-white/70
-            dark:bg-slate-900/70
+            bg-white/75
+            dark:bg-slate-900/75
             backdrop-blur-xl
             shadow-lg
+            hover:shadow-xl
+            transition-all
+            duration-300
             overflow-hidden
             min-h-[650px]
           "
         >
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-700">
-            <h2 className="font-semibold text-lg">
+          {/* Column Header */}
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              px-5
+              py-4
+              border-b
+              border-slate-200/70
+              dark:border-slate-700/70
+              bg-white/40
+              dark:bg-slate-900/40
+              backdrop-blur
+            "
+          >
+            <h2 className="text-lg font-semibold tracking-tight">
               {title}
             </h2>
 
-            <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
+            <span
+              className="
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-full
+                bg-slate-100
+                dark:bg-slate-800
+                text-xs
+                font-semibold
+                text-secondary
+              "
+            >
               {tasks.length}
             </span>
           </div>
 
+          {/* Tasks */}
           <div className="flex-1 p-4 space-y-4">
             {tasks.map((task, index) => (
               <Draggable
+                key={task.id}
                 draggableId={task.id}
                 index={index}
-                key={task.id}
               >
                 {(d) => (
                   <div
@@ -74,6 +107,12 @@ export default function KanbanColumn({
                 )}
               </Draggable>
             ))}
+
+            {tasks.length === 0 && (
+              <div className="flex h-40 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-sm text-secondary">
+                Drop tasks here
+              </div>
+            )}
 
             {p.placeholder}
           </div>
