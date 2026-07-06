@@ -3,17 +3,16 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DragDropContext,
-  Droppable,
-  Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Bell, Sun, Moon, Trash2, Pencil } from "lucide-react";
-
+import { LayoutDashboard, Bell, Sun, Moon, Search,} from "lucide-react";
+import TaskCard from "../components/TaskCard";
 import api from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { socket } from "../socket/socket";
 import { useTheme } from "../theme/ThemeContext";
 import CreateTaskModal from "../components/CreateTaskModal";
+import KanbanColumn from "../components/KanbanColumn";
 
 /* ================= TYPES ================= */
 
@@ -90,6 +89,7 @@ const DashboardPage = () => {
 
   const [view, setView] = useState<View>("ALL");
   const [showCreate, setShowCreate] = useState(false);
+  const [search, setSearch] = useState("");
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -143,9 +143,22 @@ const DashboardPage = () => {
         (new Date(t.dueDate) >= now || t.status === "COMPLETED")
       )
         return false;
+        const q = search.toLowerCase();
+
+        if (
+          q &&
+          !(
+            t.title.toLowerCase().includes(q) ||
+            t.description.toLowerCase().includes(q) ||
+            t.assignee?.name?.toLowerCase().includes(q) ||
+            t.creator?.name?.toLowerCase().includes(q)
+          )
+        ) {
+          return false;
+        }
       return true;
     });
-  }, [tasks, view, user?.id]);
+  }, [tasks, view, user?.id, search]);
 
   /* ================= ACTIONS ================= */
 
@@ -164,45 +177,123 @@ const DashboardPage = () => {
   /* ================= UI ================= */
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4
-                text-gray-900 dark:text-gray-100" style={{ zoom: "110%" }}>
-      <div className="max-w-7xl mx-auto space-y-4">
+    <div className="min-h-screen bg-background p-8 text-text dark:bg-slate-950 dark:text-slate-100"
+  style={{ zoom: "110%" }}>
+      <div className="max-w-[1850px] mx-auto space-y-6">
         {/* HEADER */}
-        <div className="flex justify-between items-center relative">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              Dashboard
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Logged in as <b>{user?.name}</b>
-            </p>
-          </div>
+        <div
+            className="
+              relative
+              flex
+              justify-between
+              items-center
+              rounded-3xl
+              border
+              border-white/40
+              bg-white/60
+              dark:bg-slate-900/60
+              backdrop-blur-xl
+              shadow-xl
+              px-6
+              py-5
+            "
+          >
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+              <LayoutDashboard
+                size={24}
+                className="text-primary"
+              />
+            </div>
+
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Task Manager
+              </h1>
+
+              <p className="text-secondary">
+                Collaborate, assign and track work.
+              </p>
+            </div>
+        </div>
 
           <div className="flex gap-2 items-center">
             <button
               onClick={() => setShowCreate(true)}
-              className="px-4 py-2 bg-green-600 text-white rounded"
+              className="
+                          flex
+                          items-center
+                          gap-2
+                          h-11
+                          px-5
+                          rounded-xl
+                          bg-primary
+                          text-white
+                          font-medium
+                          hover:bg-blue-700
+                          transition
+                          "
             >
               + Create Task
             </button>
 
             <button
               onClick={() => setShowNotifications((s) => !s)}
-              className="p-2 rounded bg-gray-200 dark:bg-gray-700"
+              className="
+                          flex
+                          items-center
+                          justify-center
+                          h-11
+                          w-11
+                          rounded-xl
+                          border
+                          border-border
+                          bg-surface
+                          hover:bg-slate-100
+                          dark:bg-slate-800
+                          dark:hover:bg-slate-700
+                          transition
+                          "
             >
               <Bell size={20} />
             </button>
 
             <button
               onClick={toggleTheme}
-              className="p-2 rounded bg-gray-200 dark:bg-gray-700"
+              className="
+                          flex
+                          items-center
+                          justify-center
+                          h-11
+                          w-11
+                          rounded-xl
+                          border
+                          border-border
+                          bg-surface
+                          hover:bg-slate-100
+                          dark:bg-slate-800
+                          dark:hover:bg-slate-700
+                          transition
+                          "
             >
               {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
             <button
               onClick={logout}
-              className="px-3 py-2 bg-red-600 text-white rounded"
+              className="
+                          flex
+                          items-center
+                          justify-center
+                          h-11
+                          px-5
+                          rounded-xl
+                          bg-danger
+                          text-white
+                          font-medium
+                          hover:bg-red-600
+                          transition
+                          "
             >
               Logout
             </button>
@@ -235,94 +326,58 @@ const DashboardPage = () => {
 
         {/* VIEW FILTER */}
         <div className="flex gap-2">
-          {["ALL", "ASSIGNED", "CREATED", "OVERDUE"].map((v) => (
-            <button
-              key={v}
-              onClick={() => setView(v as View)}
-              className={`px-3 py-1 rounded ${
-                view === v
-                  ? "bg-blue-600 text-white"
-                  : "bg-white dark:bg-gray-800"
-              }`}
-            >
-              {v}
-            </button>
+          {[
+            { value: "ALL", label: "All" },
+            { value: "ASSIGNED", label: "Assigned" },
+            { value: "CREATED", label: "Created" },
+            { value: "OVERDUE", label: "Overdue" },
+          ].map((filter) => (
+          <button
+            key={filter.value}
+            onClick={() => setView(filter.value as View)}
+            className={`
+              h-10
+              px-5
+              rounded-full
+              font-medium
+              transition-all
+              duration-200
+              ${
+                view === filter.value
+                  ? "bg-primary text-white shadow-md"
+                  : "bg-surface border border-border text-secondary hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700"
+              }
+            `}
+          >
+            {filter.label}
+          </button>
           ))}
         </div>
 
         {/* KANBAN */}
         <DragDropContext onDragEnd={onDragEnd}>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div
+              className="
+                mt-8
+                grid
+                grid-cols-1
+                lg:grid-cols-2
+                2xl:grid-cols-4
+                gap-6
+                items-start
+              "
+            >
             {STATUS_COLUMNS.map((status) => (
-              <Droppable droppableId={status} key={status}>
-                {(p) => (
-                  <div
-                    ref={p.innerRef}
-                    {...p.droppableProps}
-                    className="bg-gray-200 dark:bg-gray-800 p-3 rounded min-h-[400px]"
-                  >
-                    <h2 className="text-center font-semibold mb-3
-                    text-gray-900 dark:text-gray-100">
-                      {STATUS_LABELS[status]}
-                    </h2>
-
-                    {filteredTasks
-                      .filter((t) => t.status === status)
-                      .map((t, i) => (
-                        <Draggable draggableId={t.id} index={i} key={t.id}>
-                          {(d) => (
-                            <div
-                              ref={d.innerRef}
-                              {...d.draggableProps}
-                              {...d.dragHandleProps}
-                              className="bg-white dark:bg-gray-700 p-3 mb-2 rounded shadow
-                              text-gray-900 dark:text-gray-100">
-                              <div className="flex justify-between items-center">
-                                <h3 className="font-semibold">{t.title}</h3>
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={() => setEditTask(t)}
-                                    className="text-blue-600"
-                                  >
-                                    <Pencil size={16} />
-                                  </button>
-                                  <button
-                                    onClick={() => deleteTask(t.id)}
-                                    className="text-red-600"
-                                  >
-                                    <Trash2 size={16} />
-                                  </button>
-                                </div>
-                              </div>
-
-                              <p className="text-sm opacity-80">
-                                {t.description}
-                              </p>
-
-                              <div className="text-xs mt-2">
-                                Assigned to: <b>{t.assignee?.name ?? "Unassigned"}</b>
-                              </div>
-
-                              <div className="flex gap-2 mt-2 text-xs">
-                                <span
-                                  className={`px-2 py-1 rounded ${PRIORITY_COLORS[t.priority]}`}
-                                >
-                                  {t.priority}
-                                </span>
-                                <span>
-                                  {new Date(t.dueDate).toLocaleString()}
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {p.placeholder}
-                  </div>
-                )}
-              </Droppable>
+              <KanbanColumn
+                key={status}
+                status={status}
+                title={STATUS_LABELS[status]}
+                tasks={filteredTasks.filter((t) => t.status === status)}
+                onEdit={setEditTask}
+                onDelete={deleteTask}
+              />
             ))}
-          </div>
+            </div>
         </DragDropContext>
       </div>
 
