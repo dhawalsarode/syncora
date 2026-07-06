@@ -299,36 +299,76 @@ const DashboardPage = () => {
             </button>
           </div>
 
-          {/* NOTIFICATIONS PANEL */}
-          {showNotifications && (
-            <div className="absolute right-0 top-14 w-80 bg-white dark:bg-gray-800 shadow-lg rounded p-3 z-50">
-              <h3 className="font-semibold mb-2">Notifications</h3>
-              {notifications.length === 0 && (
-                <p className="text-sm text-gray-500">No notifications</p>
-              )}
-              <ul className="space-y-2 max-h-64 overflow-y-auto">
-                {Array.isArray(notifications) &&
-                notifications.map((n) => (
-                  <li
-                    key={n.id}
-                    className="text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded"
-                  >
-                    <div>{n.message}</div>
-                    <div className="text-xs opacity-70">
-                      {new Date(n.createdAt).toLocaleString()}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+        {/* NOTIFICATIONS PANEL */}
+        {showNotifications && (
+          <div
+            className="
+              absolute
+              right-0
+              top-16
+              w-96
+              rounded-3xl
+              border
+              border-slate-200
+              dark:border-slate-700
+              bg-white/95
+              dark:bg-slate-900/95
+              backdrop-blur-xl
+              shadow-2xl
+              overflow-hidden
+              z-50
+            "
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-700">
+              <h3 className="font-semibold text-lg">
+                Notifications
+              </h3>
+
+              <span className="text-xs text-secondary">
+                {notifications.length}
+              </span>
             </div>
-          )}
+
+            <div className="max-h-96 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <div className="py-12 text-center text-secondary">
+                  No notifications
+                </div>
+              ) : (
+                notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    className="
+                      px-5
+                      py-4
+                      border-b
+                      border-slate-100
+                      dark:border-slate-800
+                      hover:bg-slate-50
+                      dark:hover:bg-slate-800
+                      transition
+                    "
+                  >
+                    <p className="text-sm leading-6">
+                      {n.message}
+                    </p>
+
+                    <p className="mt-2 text-xs text-secondary">
+                      {new Date(n.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
         </div>
 
         {/* SEARCH */}
         <div className="relative mt-6">
           <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary"
+            size={20}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
           />
 
           <input
@@ -379,7 +419,7 @@ const DashboardPage = () => {
                 duration-200
                 ${
                   view === filter.value
-                    ? "bg-primary text-white shadow-md"
+                    ? "bg-primary text-white shadow-sm"
                     : "bg-surface border border-border text-secondary hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700"
                 }
               `}

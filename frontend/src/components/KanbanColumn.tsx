@@ -85,7 +85,7 @@ export default function KanbanColumn({
           </div>
 
           {/* Tasks */}
-          <div className="flex-1 p-4 space-y-4">
+          <div className="flex-1 p-5 space-y-5">
             {tasks.map((task, index) => (
               <Draggable
                 key={task.id}
@@ -109,7 +109,7 @@ export default function KanbanColumn({
             ))}
 
             {tasks.length === 0 && (
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-sm text-secondary">
+              <div className="flex h-40 items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-sm text-secondary">
                 Drop tasks here
               </div>
             )}
