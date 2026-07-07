@@ -240,22 +240,45 @@ const DashboardPage = () => {
             <button
               onClick={() => setShowNotifications((s) => !s)}
               className="
-                          flex
-                          items-center
-                          justify-center
-                          h-11
-                          w-11
-                          rounded-xl
-                          border
-                          border-border
-                          bg-surface
-                          hover:bg-slate-100
-                          dark:bg-slate-800
-                          dark:hover:bg-slate-700
-                          transition
-                          "
+                relative
+                flex
+                items-center
+                justify-center
+                h-11
+                w-11
+                rounded-xl
+                border
+                border-border
+                bg-surface
+                hover:bg-slate-100
+                dark:bg-slate-800
+                dark:hover:bg-slate-700
+                transition
+              "
             >
               <Bell size={20} />
+
+              {notifications.length > 0 && (
+                <span
+                  className="
+                    absolute
+                    -top-1
+                    -right-1
+                    flex
+                    h-5
+                    w-5
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-red-500
+                    text-[10px]
+                    font-bold
+                    text-white
+                  "
+                >
+                  {notifications.length}
+                </span>
+              )}
             </button>
 
             <button

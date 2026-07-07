@@ -30,15 +30,17 @@ export default function TaskCard({
   return (
     <div
       className="
-        rounded-2xl
+        group
+        rounded-3xl
         border
         border-slate-200
         dark:border-slate-700
         bg-white
         dark:bg-slate-800
         shadow-sm
-        hover:shadow-lg
+        hover:shadow-xl
         hover:-translate-y-1
+        hover:scale-[1.015]
         transition-all
         duration-300
         p-4
@@ -54,14 +56,30 @@ export default function TaskCard({
         <div className="flex gap-1 shrink-0">
           <button
             onClick={() => onEdit(task)}
-            className="rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+            className="
+              rounded-xl
+              p-2
+              opacity-60
+              group-hover:opacity-100
+              hover:bg-slate-100
+              dark:hover:bg-slate-700
+              transition-all
+            "
           >
             <Pencil size={16} />
           </button>
 
           <button
             onClick={() => onDelete(task.id)}
-            className="rounded-lg p-2 hover:bg-red-50 dark:hover:bg-red-900/30 transition"
+            className="
+              rounded-xl
+              p-2
+              opacity-60
+              group-hover:opacity-100
+              hover:bg-red-50
+              dark:hover:bg-red-900/30
+              transition-all
+            "
           >
             <Trash2 size={16} />
           </button>
@@ -77,7 +95,6 @@ export default function TaskCard({
       {/* Users */}
 
       <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-
         <div>
           <div className="flex items-center gap-1 text-secondary">
             <User size={13} />
@@ -99,13 +116,11 @@ export default function TaskCard({
             {task.creator?.name}
           </div>
         </div>
-
       </div>
 
       {/* Footer */}
 
       <div className="mt-5 flex items-center justify-between">
-
         <span
           className={`
             flex
@@ -125,13 +140,14 @@ export default function TaskCard({
 
         <span className="flex items-center gap-1 text-xs text-secondary">
           <CalendarDays size={13} />
-
-          {new Date(task.dueDate).toLocaleDateString("en-GB", {
+          {new Date(task.dueDate).toLocaleString("en-GB", {
             day: "2-digit",
             month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
           })}
         </span>
-
       </div>
     </div>
   );

@@ -82,13 +82,36 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div
+        className="
+          fixed
+          inset-0
+          z-50
+          flex
+          items-center
+          justify-center
+          bg-black/30
+          backdrop-blur-sm
+          p-6
+        "
+      >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white dark:bg-gray-800 p-6 rounded w-full max-w-md space-y-3
-                   text-gray-900 dark:text-gray-100"
+        className="
+                  w-full
+                  max-w-lg
+                  rounded-3xl
+                  border
+                  border-slate-200
+                  dark:border-slate-700
+                  bg-white
+                  dark:bg-slate-900
+                  shadow-2xl
+                  p-7
+                  space-y-5
+                "
       >
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-2xl font-bold tracking-tight">
           {isEdit ? "Edit Task" : "Create Task"}
         </h2>
 
@@ -96,27 +119,87 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
         <input
           {...register("title")}
           placeholder="Title"
-          className="w-full border p-2 rounded bg-white text-black"
+          className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    dark:border-slate-700
+                    bg-slate-50
+                    dark:bg-slate-800
+                    px-4
+                    py-3
+                    transition
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-primary/20
+                    focus:border-primary
+                  "
         />
 
         {/* DESCRIPTION */}
         <textarea
           {...register("description")}
           placeholder="Description"
-          className="w-full border p-2 rounded bg-white text-black"
+          className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    dark:border-slate-700
+                    bg-slate-50
+                    dark:bg-slate-800
+                    px-4
+                    py-3
+                    transition
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-primary/20
+                    focus:border-primary
+                  "
         />
 
         {/* DUE DATE + TIME */}
         <input
           type="datetime-local"
           {...register("dueDate")}
-          className="w-full border p-2 rounded bg-white text-black"
+          className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    dark:border-slate-700
+                    bg-slate-50
+                    dark:bg-slate-800
+                    px-4
+                    py-3
+                    transition
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-primary/20
+                    focus:border-primary
+                  "
         />
 
         {/* PRIORITY */}
         <select
           {...register("priority")}
-          className="w-full border p-2 rounded bg-white text-black"
+          className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    dark:border-slate-700
+                    bg-slate-50
+                    dark:bg-slate-800
+                    px-4
+                    py-3
+                    transition
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-primary/20
+                    focus:border-primary
+                  "
         >
           <option value="LOW">Low</option>
           <option value="MEDIUM">Medium</option>
@@ -127,7 +210,22 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
         {/* ASSIGN USER */}
         <select
           {...register("assignedToId")}
-          className="w-full border p-2 rounded bg-white text-black"
+          className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    dark:border-slate-700
+                    bg-slate-50
+                    dark:bg-slate-800
+                    px-4
+                    py-3
+                    transition
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-primary/20
+                    focus:border-primary
+                  "
         >
           <option value="">Unassigned</option>
           {users.map((u: any) => (
@@ -138,21 +236,45 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
         </select>
 
         {/* ACTIONS */}
-        <div className="flex justify-end gap-2 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-3 py-1 border rounded"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-3 py-1 bg-blue-600 text-white rounded"
-          >
-            {isEdit ? "Update" : "Create"}
-          </button>
-        </div>
+  <div className="flex justify-end gap-3 pt-2">
+    <button
+      type="button"
+      onClick={onClose}
+      className="
+        h-11
+        px-5
+        rounded-xl
+        border
+        border-slate-200
+        dark:border-slate-700
+        bg-white
+        dark:bg-slate-800
+        hover:bg-slate-50
+        dark:hover:bg-slate-700
+        transition
+      "
+    >
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      className="
+        h-11
+        px-6
+        rounded-xl
+        bg-primary
+        text-white
+        font-medium
+        shadow-lg
+        hover:brightness-110
+        active:scale-95
+        transition-all
+      "
+    >
+      {task ? "Save Changes" : "Create Task"}
+    </button>
+  </div>
       </form>
     </div>
   );
