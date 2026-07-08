@@ -31,7 +31,7 @@ export default function TaskCard({
     <div
       className="
         group
-        rounded-3xl
+        rounded-2xl
         border
         border-slate-200
         dark:border-slate-700
@@ -40,16 +40,15 @@ export default function TaskCard({
         shadow-sm
         hover:shadow-xl
         hover:-translate-y-1
-        hover:scale-[1.015]
         transition-all
         duration-300
-        p-4
+        p-3.5
       "
     >
       {/* Header */}
 
       <div className="flex justify-between items-start gap-3">
-        <h3 className="font-semibold text-base leading-tight line-clamp-2">
+        <h3 className="font-semibold text-[15px] leading-tight line-clamp-2">
           {task.title}
         </h3>
 
@@ -120,7 +119,7 @@ export default function TaskCard({
 
       {/* Footer */}
 
-      <div className="mt-5 flex items-center justify-between">
+      <div className="mt-4 flex items-center justify-between">
         <span
           className={`
             flex

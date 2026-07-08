@@ -45,7 +45,7 @@ export default function KanbanColumn({
             transition-all
             duration-300
             overflow-hidden
-            min-h-[650px]
+            min-h-[520px]
           "
         >
           {/* Column Header */}
@@ -64,7 +64,7 @@ export default function KanbanColumn({
               backdrop-blur
             "
           >
-            <h2 className="text-lg font-semibold tracking-tight">
+            <h2 className="text-base font-semibold tracking-tight">
               {title}
             </h2>
 
@@ -88,7 +88,7 @@ export default function KanbanColumn({
           </div>
 
           {/* Tasks */}
-          <div className="flex-1 p-5 space-y-5">
+          <div className="flex-1 p-4 space-y-4">
             {tasks.map((task, index) => (
               <Draggable
                 key={task.id}

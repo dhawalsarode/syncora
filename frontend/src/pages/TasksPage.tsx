@@ -5,12 +5,34 @@ import CreateTaskModal from "../components/CreateTaskModal";
 import { useTasks } from "../hooks/useTasks";
 import TaskCard from "../components/tasks/TaskCard";
 
+import KanbanColumn from "../components/tasks/KanbanColumn";
+import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { useUpdateTask } from "../hooks/useUpdateTask";
+
 export default function TasksPage() {
   const { data: tasks = [], isLoading } = useTasks();
 
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const updateTask = useUpdateTask();
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    if (
+      result.destination.droppableId ===
+      result.source.droppableId
+    )
+      return;
+
+    updateTask.mutate({
+      id: result.draggableId,
+      data: {
+        status: result.destination.droppableId as any,
+      },
+    });
+  };
 
   const filteredTasks = useMemo(() => {
     const query = search.toLowerCase();
@@ -104,126 +126,78 @@ export default function TasksPage() {
 
         </div>
                 </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+      <div className="
+                      grid
+                      gap-6
+                      2xl:grid-cols-4
+                      xl:grid-cols-2
+                      md:grid-cols-2
+                      grid-cols-1
+                      ">
 
-        <div className="grid gap-6 xl:grid-cols-4 md:grid-cols-2">
+        <KanbanColumn
+          status="TODO"
+          title="To Do"
+          tasks={filteredTasks.filter(
+            (t) => t.status === "TODO"
+          )}
+          onEdit={(task) => {
+            setSelectedTask(task);
+            setShowModal(true);
+          }}
+          onDelete={(id) => {
+            console.log("Delete task:", id);
+          }}
+        />
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-semibold">
-              To Do
-            </h2>
+        <KanbanColumn
+          status="IN_PROGRESS"
+          title="In Progress"
+          tasks={filteredTasks.filter(
+            (t) => t.status === "IN_PROGRESS"
+          )}
+          onEdit={(task) => {
+            setSelectedTask(task);
+            setShowModal(true);
+          }}
+          onDelete={(id) => {
+            console.log("Delete task:", id);
+          }}
+        />
 
-            <div className="space-y-4">
-              {filteredTasks
-                .filter((t) => t.status === "TODO")
-                .map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onEdit={(task) => {
-                      setSelectedTask(task);
-                      setShowModal(true);
-                    }}
-                    onDelete={(id) => {
-                      console.log("Delete:", id);
-                    }}
-                  />
-                ))}
-                {filteredTasks.filter((t) => t.status === "TODO").length === 0 && (
-                  <div className="flex h-32 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 text-sm text-slate-400">
-                    No tasks
-                  </div>
-                )}
-            </div>
-          </div>
+        <KanbanColumn
+          status="REVIEW"
+          title="Review"
+          tasks={filteredTasks.filter(
+            (t) => t.status === "REVIEW"
+          )}
+          onEdit={(task) => {
+            setSelectedTask(task);
+            setShowModal(true);
+          }}
+          onDelete={(id) => {
+            console.log("Delete task:", id);
+          }}
+        />
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-semibold">
-              In Progress
-            </h2>
+        <KanbanColumn
+          status="COMPLETED"
+          title="Completed"
+          tasks={filteredTasks.filter(
+            (t) => t.status === "COMPLETED"
+          )}
+          onEdit={(task) => {
+            setSelectedTask(task);
+            setShowModal(true);
+          }}
+          onDelete={(id) => {
+            console.log("Delete task:", id);
+          }}
+        />
 
-            <div className="space-y-4">
-              {filteredTasks
-                .filter((t) => t.status === "IN_PROGRESS")
-                .map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onEdit={(task) => {
-                      setSelectedTask(task);
-                      setShowModal(true);
-                    }}
-                    onDelete={(id) => {
-                      console.log("Delete:", id);
-                    }}
-                  />
-                ))}
-                {filteredTasks.filter((t) => t.status === "IN_PROGRESS").length === 0 && (
-                  <div className="flex h-32 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 text-sm text-slate-400">
-                    No tasks
-                  </div>
-                )}
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-semibold">
-              Review
-            </h2>
-
-            <div className="space-y-4">
-              {filteredTasks
-                .filter((t) => t.status === "REVIEW")
-                .map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onEdit={(task) => {
-                      setSelectedTask(task);
-                      setShowModal(true);
-                    }}
-                    onDelete={(id) => {
-                      console.log("Delete:", id);
-                    }}
-                  />
-                ))}
-                {filteredTasks.filter((t) => t.status === "REVIEW").length === 0 && (
-                  <div className="flex h-32 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 text-sm text-slate-400">
-                    No tasks
-                  </div>
-                )}
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-semibold">
-              Completed
-            </h2>
-
-            <div className="space-y-4">
-              {filteredTasks
-                .filter((t) => t.status === "COMPLETED")
-                .map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onEdit={(task) => {
-                      setSelectedTask(task);
-                      setShowModal(true);
-                    }}
-                    onDelete={(id) => {
-                      console.log("Delete:", id);
-                    }}
-                  />
-                ))}
-                {filteredTasks.filter((t) => t.status === "COMPLETED").length === 0 && (
-                  <div className="flex h-32 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 text-sm text-slate-400">
-                    No tasks
-                  </div>
-                )}
-            </div>
-          </div>
-
-        </div>
+      </div>
+    </DragDropContext>
 
       {showModal && (
         <CreateTaskModal
