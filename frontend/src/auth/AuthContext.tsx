@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/client";
+import { socket } from "../socket/socket";
 
 /* ================= TYPES ================= */
 
@@ -40,10 +41,12 @@ export const AuthProvider = ({
     api
       .get("/auth/me")
       .then((res) => {
-        setUser(res.data.user);
+        setUser(res.data.user); 
+        socket.connect();
       })
       .catch(() => {
         setUser(null);
+        socket.disconnect();
       })
       .finally(() => setLoading(false));
   }, []);
@@ -57,6 +60,7 @@ export const AuthProvider = ({
     } finally {
       setUser(null);
       window.location.href = "/login";
+      socket.disconnect();
     }
   };
 
