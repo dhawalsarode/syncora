@@ -1,10 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
 import api from "../api/client";
-
-const fetchNotifications = async () => {
-  const res = await api.get("/notifications");
-  return res.data.notifications || [];
-};
 
 const NotificationsPanel = ({ notifications }: { notifications: any[] }) => {
   if (!Array.isArray(notifications)) return null;

@@ -11,15 +11,29 @@ const NotificationBell = () => {
     queryFn: fetchNotifications,
   });
 
+  const refreshNotifications = () => {
+  queryClient.invalidateQueries({
+    queryKey: ["notifications"],
+  });
+};                                
+
   useEffect(() => {
     socket.on("notification:new", () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     });
 
     return () => {
-      socket.off("notification:new");
+      socket.off("notification:new", refreshNotifications);
     };
   }, []);
+
+  useEffect(() => {
+    socket.on("notification:new", refreshNotifications);
+
+    return () => {
+      socket.off("notification:new", refreshNotifications);
+    };
+  }, [queryClient]);
 
   return (
     <div className="relative">

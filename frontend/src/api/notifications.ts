@@ -1,6 +1,16 @@
 import api from "./client";
 
-export const fetchNotifications = async () => {
+export interface Notification {
+  id: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+}
+
+export const fetchNotifications = async (): Promise<Notification[]> => {
   const res = await api.get("/notifications");
-  return res.data.notifications;
+  return res.data;
 };
+
+export const markNotificationRead = (id: string) =>
+  api.patch(`/notifications/${id}/read`);
