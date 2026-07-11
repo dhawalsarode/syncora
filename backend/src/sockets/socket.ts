@@ -22,6 +22,16 @@ io.use(socketAuth);
 
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id);
+
+  const userId = socket.data.user.id;
+
+  socket.join(userId);
+
+  console.log(`User ${userId} joined room ${userId}`);
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Socket disconnected:", socket.id);
+  });
 });
 
 export function getIO() {
