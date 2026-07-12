@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
+import AuthLayout from "../auth/AuthLayout";
 import { Toast } from "../lib/toast";
 
 const RegisterPage = () => {
@@ -26,52 +27,129 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <AuthLayout
+      title="Create Account"
+      subtitle="Create your Syncora workspace account."
+    >
       <form
         onSubmit={submit}
-        className="bg-white p-6 rounded-lg shadow w-full max-w-sm"
+        className="space-y-5"
       >
-        <h1 className="text-2xl font-bold mb-4">Create Account</h1>
-
-        {error && <p className="text-red-600 mb-3">{error}</p>}
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
 
         <input
-          className="w-full border p-2 mb-3 rounded"
-          placeholder="Name"
+          placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          className="
+            w-full
+            rounded-xl
+            border
+            border-slate-200
+            bg-white/70
+            px-5
+            py-4
+            text-base
+            placeholder:text-slate-400
+            outline-none
+            transition-all
+            duration-200
+            focus:border-[#6D5CFF]
+            focus:ring-4
+            focus:ring-[#6D5CFF]/10
+          "
         />
 
         <input
-          className="w-full border p-2 mb-3 rounded"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="
+            w-full
+            rounded-xl
+            border
+            border-slate-200
+            bg-white/70
+            px-5
+            py-4
+            text-base
+            placeholder:text-slate-400
+            outline-none
+            transition-all
+            duration-200
+            focus:border-[#6D5CFF]
+            focus:ring-4
+            focus:ring-[#6D5CFF]/10
+          "
         />
 
         <input
           type="password"
-          className="w-full border p-2 mb-4 rounded"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="
+            w-full
+            rounded-xl
+            border
+            border-slate-200
+            bg-white/70
+            px-5
+            py-4
+            text-base
+            placeholder:text-slate-400
+            outline-none
+            transition-all
+            duration-200
+            focus:border-[#6D5CFF]
+            focus:ring-4
+            focus:ring-[#6D5CFF]/10
+          "
         />
 
-        <button className="w-full bg-blue-600 text-white py-2 rounded">
-          Register
+        <button
+          className="
+            w-full
+            rounded-xl
+            bg-[#6D5CFF]
+            py-3.5
+            text-base
+            font-semibold
+            text-white
+            transition-all
+            duration-200
+            hover:bg-[#5B4EF5]
+            hover:-translate-y-0.5
+            hover:shadow-lg
+            active:scale-[0.98]
+          "
+        >
+          Create Account
         </button>
 
-        <p className="text-sm mt-4 text-center">
+        <p className="pt-2 text-center text-sm text-slate-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 underline">
+          <Link
+            to="/login"
+            className="
+              font-semibold
+              text-[#6D5CFF]
+              transition-colors
+              hover:text-[#5B4EF5]
+            "
+          >
             Login
           </Link>
         </p>
       </form>
-    </div>
+    </AuthLayout>
   );
 };
 
