@@ -3,8 +3,10 @@ import useDashboard from "../hooks/useDashboard";
 import StatsGrid from "../components/dashboard/StatsGrid";
 import AnalyticsChart from "../components/dashboard/AnalyticsChart";
 import ProgressChart from "../components/dashboard/ProgressChart";
+import { useAuth } from "../auth/AuthContext";
 
 const DashboardPage = () => {
+  const { user } = useAuth();
   const {
     loading,
     stats,
@@ -36,7 +38,7 @@ const DashboardPage = () => {
           </p>
 
           <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Good Evening, Ramesh 👋
+            Good Evening, {user?.name} 👋
           </h1>
 
           <p className="mt-2 text-sm text-slate-500">

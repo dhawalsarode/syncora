@@ -4,6 +4,7 @@ import { useAuth } from "../auth/AuthContext";
 
 import { useUpdateProfile } from "../hooks/useUpdateProfile";
 import { useChangePassword } from "../hooks/useChangePassword";
+
 import { Toast } from "../lib/toast";
 
 export default function SettingsPage() {
@@ -13,47 +14,67 @@ export default function SettingsPage() {
   const updatePassword = useChangePassword();
 
   const [name, setName] = useState(user?.name ?? "");
-
-  const [currentPassword, setCurrentPassword] =
-    useState("");
-
-  const [newPassword, setNewPassword] =
-    useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-3xl space-y-6">
+
+      {/* Header */}
 
       <div>
-        <p className="text-sm font-medium text-primary">
+        <p className="text-sm font-medium text-indigo-600">
           Settings
         </p>
 
-        <h1 className="mt-1 text-3xl font-bold">
+        <h1 className="mt-1 text-4xl font-bold tracking-tight">
           Account Settings
         </h1>
+
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
+          Manage your profile, password and account preferences.
+        </p>
       </div>
 
-      {/* Profile */}
+      {/* ---------------- Profile ---------------- */}
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-slate-700 dark:bg-slate-900">
 
-        <h2 className="mb-5 text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           Profile
         </h2>
 
+        <p className="mt-1 mb-6 text-sm text-slate-500 dark:text-slate-400">
+          Update the name displayed across your workspace.
+        </p>
+
         <input
           value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
-          className="mb-4 w-full rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
+          onChange={(e) => setName(e.target.value)}
+          className="
+            w-full
+            rounded-xl
+            border
+            border-slate-200
+            bg-white
+            px-4
+            py-3
+            outline-none
+            transition
+            focus:border-indigo-600
+            focus:ring-4
+            focus:ring-indigo-100
+            dark:border-slate-700
+            dark:bg-slate-800
+            dark:focus:ring-indigo-900/40
+          "
         />
 
         <button
+          disabled={updateProfile.isPending}
           onClick={async () => {
             try {
-              const res =
-                await updateProfile.mutateAsync(name);
+              const res = await updateProfile.mutateAsync(name);
 
               setUser(res.data.user);
 
@@ -62,46 +83,99 @@ export default function SettingsPage() {
               Toast.error("Unable to update profile.");
             }
           }}
-          className="rounded-xl bg-primary px-5 py-3 text-white"
+          className="
+            mt-5
+            rounded-xl
+            bg-indigo-600
+            px-6
+            py-3
+            font-medium
+            text-white
+            shadow-md
+            transition
+            hover:bg-indigo-700
+            active:scale-[0.98]
+            disabled:cursor-not-allowed
+            disabled:opacity-60
+          "
         >
-          Save Profile
+          {updateProfile.isPending
+            ? "Saving..."
+            : "Save Profile"}
         </button>
 
-      </div>
+      </section>
 
-      {/* Password */}
+      {/* ---------------- Password ---------------- */}
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-slate-700 dark:bg-slate-900">
 
-        <h2 className="mb-5 text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           Change Password
         </h2>
 
-        <input
-          type="password"
-          placeholder="Current password"
-          value={currentPassword}
-          onChange={(e) =>
-            setCurrentPassword(
-              e.target.value
-            )
-          }
-          className="mb-3 w-full rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
-        />
+        <p className="mt-1 mb-6 text-sm text-slate-500 dark:text-slate-400">
+          Choose a strong password to keep your account secure.
+        </p>
 
-        <input
-          type="password"
-          placeholder="New password"
-          value={newPassword}
-          onChange={(e) =>
-            setNewPassword(
-              e.target.value
-            )
-          }
-          className="mb-4 w-full rounded-xl border border-slate-200 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
-        />
+        <div className="space-y-4">
+
+          <input
+            type="password"
+            placeholder="Current password"
+            value={currentPassword}
+            onChange={(e) =>
+              setCurrentPassword(e.target.value)
+            }
+            className="
+              w-full
+              rounded-xl
+              border
+              border-slate-200
+              bg-white
+              px-4
+              py-3
+              outline-none
+              transition
+              focus:border-indigo-600
+              focus:ring-4
+              focus:ring-indigo-100
+              dark:border-slate-700
+              dark:bg-slate-800
+              dark:focus:ring-indigo-900/40
+            "
+          />
+
+          <input
+            type="password"
+            placeholder="New password"
+            value={newPassword}
+            onChange={(e) =>
+              setNewPassword(e.target.value)
+            }
+            className="
+              w-full
+              rounded-xl
+              border
+              border-slate-200
+              bg-white
+              px-4
+              py-3
+              outline-none
+              transition
+              focus:border-indigo-600
+              focus:ring-4
+              focus:ring-indigo-100
+              dark:border-slate-700
+              dark:bg-slate-800
+              dark:focus:ring-indigo-900/40
+            "
+          />
+
+        </div>
 
         <button
+          disabled={updatePassword.isPending}
           onClick={() =>
             updatePassword.mutate(
               {
@@ -121,29 +195,60 @@ export default function SettingsPage() {
               }
             )
           }
-          className="rounded-xl bg-primary px-5 py-3 text-white"
+          className="
+            mt-5
+            rounded-xl
+            bg-indigo-600
+            px-6
+            py-3
+            font-medium
+            text-white
+            shadow-md
+            transition
+            hover:bg-indigo-700
+            active:scale-[0.98]
+            disabled:cursor-not-allowed
+            disabled:opacity-60
+          "
         >
-          Change Password
+          {updatePassword.isPending
+            ? "Updating..."
+            : "Change Password"}
         </button>
 
-      </div>
+      </section>
 
-      {/* Account */}
+      {/* ---------------- Account ---------------- */}
 
-      <div className="rounded-3xl border border-red-200 bg-white p-6 dark:border-red-800 dark:bg-slate-900">
+      <section className="rounded-3xl border border-red-200 bg-white p-6 shadow-sm dark:border-red-800 dark:bg-slate-900">
 
-        <h2 className="mb-4 text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           Account
         </h2>
 
+        <p className="mt-1 mb-6 text-sm text-slate-500 dark:text-slate-400">
+          Sign out from your current session.
+        </p>
+
         <button
           onClick={logout}
-          className="rounded-xl bg-red-600 px-5 py-3 text-white"
+          className="
+            rounded-xl
+            bg-red-500
+            px-6
+            py-3
+            font-medium
+            text-white
+            shadow-md
+            transition
+            hover:bg-red-600
+            active:scale-[0.98]
+          "
         >
           Logout
         </button>
 
-      </div>
+      </section>
 
     </div>
   );
