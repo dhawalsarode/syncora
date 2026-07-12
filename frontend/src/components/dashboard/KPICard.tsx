@@ -50,15 +50,13 @@ export default function KPICard({
 
         </div>
 
-        <div
-          className={`h-12 w-12 rounded-xl flex items-center justify-center ${color}`}
-        >
+        <div className={`${color} h-12 w-12 shrink-0 rounded-xl flex items-center justify-center`}>
           <Icon
-            size={22}
-            className="text-white"
-          />
+              size={22}
+              strokeWidth={2.2}
+              className="text-white"
+            />
         </div>
-
       </div>
     </div>
   );

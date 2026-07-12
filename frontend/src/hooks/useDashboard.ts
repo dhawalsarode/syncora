@@ -104,6 +104,15 @@ export default function useDashboard() {
       )
       .slice(0, 5);
 
+    const upcomingTasks = [...tasks]
+      .filter((task) => task.status !== "COMPLETED")
+      .filter((task) => new Date(task.dueDate) >= now)
+      .sort(
+        (a, b) =>
+          new Date(a.dueDate).getTime() -
+          new Date(b.dueDate).getTime()
+      )
+      .slice(0, 5);
     return {
       tasks,
 
@@ -123,6 +132,8 @@ export default function useDashboard() {
       priorityChart,
 
       recentTasks,
+
+      upcomingTasks,
     };
   }, [tasks]);
 

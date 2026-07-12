@@ -4,6 +4,7 @@ import StatsGrid from "../components/dashboard/StatsGrid";
 import AnalyticsChart from "../components/dashboard/AnalyticsChart";
 import ProgressChart from "../components/dashboard/ProgressChart";
 import { useAuth } from "../auth/AuthContext";
+import UpcomingDeadlines from "../components/dashboard/UpcomingDeadlines";
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -11,8 +12,8 @@ const DashboardPage = () => {
     loading,
     stats,
     statusChart,
-    priorityChart,
     recentTasks,
+    upcomingTasks,
   } = useDashboard();
 
   if (loading) {
@@ -66,69 +67,77 @@ const DashboardPage = () => {
 
       {/* Recent */}
 
-      <section
-        className="
-          rounded-2xl
-          border
-          border-slate-200
-          dark:border-slate-700
-          bg-white
-          dark:bg-slate-900
-          shadow-sm
-        "
-      >
+      <section className="grid gap-6 xl:grid-cols-2">
 
-        <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-5">
+        <UpcomingDeadlines
+          tasks={upcomingTasks}
+        />
 
-          <h2 className="text-lg font-semibold">
-            Recent Tasks
-          </h2>
+        <section
+          className="
+            rounded-2xl
+            border
+            border-slate-200
+            dark:border-slate-700
+            bg-white
+            dark:bg-slate-900
+            shadow-sm
+          "
+        >
+          <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-5">
 
-          <p className="mt-1 text-sm text-slate-500">
-            Latest created tasks
-          </p>
+            <h2 className="text-lg font-semibold">
+              Recent Tasks
+            </h2>
 
-        </div>
+            <p className="mt-1 text-sm text-slate-500">
+              Latest created tasks
+            </p>
 
-        <div className="divide-y divide-slate-200 dark:divide-slate-700">
+          </div>
 
-          {recentTasks.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">
-              No tasks yet.
-            </div>
-          ) : (
-            recentTasks.map((task) => (
-              <div
-                key={task.id}
-                className="flex items-center justify-between px-6 py-4"
-              >
-                <div>
-                  <h3 className="font-medium">
-                    {task.title}
-                  </h3>
+          <div className="divide-y divide-slate-200 dark:divide-slate-700">
 
-                  <p className="mt-1 text-sm text-slate-500">
-                    {task.assignee?.name ?? "Unassigned"}
-                  </p>
-                </div>
-
-                <div className="text-right">
-
-                  <div className="text-sm font-medium">
-                    {task.status.replace("_", " ")}
-                  </div>
-
-                  <div className="mt-1 text-xs text-slate-500">
-                    {new Date(task.dueDate).toLocaleDateString()}
-                  </div>
-
-                </div>
-
+            {recentTasks.length === 0 ? (
+              <div className="p-8 text-center text-slate-500">
+                No tasks yet.
               </div>
-            ))
-          )}
+            ) : (
+              recentTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="flex items-center justify-between px-6 py-4"
+                >
+                  <div>
 
-        </div>
+                    <h3 className="font-medium">
+                      {task.title}
+                    </h3>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      {task.assignee?.name ?? "Unassigned"}
+                    </p>
+
+                  </div>
+
+                  <div className="text-right">
+
+                    <div className="text-sm font-medium">
+                      {task.status.replace("_", " ")}
+                    </div>
+
+                    <div className="mt-1 text-xs text-slate-500">
+                      {new Date(task.dueDate).toLocaleDateString()}
+                    </div>
+
+                  </div>
+
+                </div>
+              ))
+            )}
+
+          </div>
+        </section>
 
       </section>
 
