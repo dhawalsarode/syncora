@@ -111,6 +111,10 @@ export class TaskService {
     if (data.dueDate !== undefined)
       updateData.dueDate = new Date(data.dueDate);
 
+    const existingTask = await prisma.task.findUnique({
+      where: { id },
+    });
+
     const task = await prisma.task.update({
       where: { id },
       data: updateData,
@@ -124,14 +128,15 @@ export class TaskService {
       },
     });
     if (
-        task.assignedToId &&
-        task.assignedToId !== task.creatorId
-      ) {
-        await NotificationService.create(
-          task.assignedToId,
-          `${task.creator.name} assigned you a task: "${task.title}"`
-        );
-      }
+      existingTask?.assignedToId !== task.assignedToId &&
+      task.assignedToId &&
+      task.assignedToId !== task.creatorId
+    ) {
+      await NotificationService.create(
+        task.assignedToId,
+        `${task.creator.name} assigned you a task: "${task.title}"`
+      );
+    }
     if (io) {
       io.emit("task:updated", task);
     }

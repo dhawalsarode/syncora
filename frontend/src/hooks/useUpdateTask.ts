@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTask } from "../api/tasks";
-import { Task } from "../api/tasks";
+import { Task } from "../types/task";
 
 export function useUpdateTask() {
   const queryClient = useQueryClient();
@@ -38,8 +38,11 @@ export function useUpdateTask() {
       }
     },
 
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
+  onSuccess: () => {
+    queryClient.invalidateQueries({
+      queryKey: ["tasks"],
+      refetchType: "active",
+    });
+  },
   });
 }

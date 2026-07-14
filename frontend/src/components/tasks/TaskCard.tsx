@@ -29,7 +29,7 @@ export default function TaskCard({
 }: Props) {
   return (
     <div
-      className="
+        className="
         group
         rounded-2xl
         border
@@ -37,13 +37,14 @@ export default function TaskCard({
         dark:border-slate-700
         bg-white
         dark:bg-slate-800
-        shadow-sm
-        hover:shadow-xl
-        hover:-translate-y-1
-        transition-all
-        duration-300
         p-3.5
-      "
+        shadow-sm
+        transition-shadow
+        duration-200
+        hover:shadow-xl
+        cursor-grab
+        active:cursor-grabbing
+        "
     >
       {/* Header */}
 

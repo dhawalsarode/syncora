@@ -81,7 +81,7 @@ export default function TasksPage() {
             className="
               flex
               items-center
-              gap-2
+              gap-4
               rounded-xl
               bg-primary
               px-5
@@ -130,7 +130,7 @@ export default function TasksPage() {
       <DragDropContext onDragEnd={onDragEnd}>
       <div className="
                       grid
-                      gap-6
+                      gap-8
                       2xl:grid-cols-4
                       xl:grid-cols-2
                       md:grid-cols-2
