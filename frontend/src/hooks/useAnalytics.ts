@@ -167,31 +167,6 @@ export default function useAnalytics() {
       },
     ];
 
-    const statusChart = [
-      {
-        name: "Todo",
-        value: tasks.filter(
-          (t) => t.status === "TODO"
-        ).length,
-      },
-      {
-        name: "Progress",
-        value: tasks.filter(
-          (t) => t.status === "IN_PROGRESS"
-        ).length,
-      },
-      {
-        name: "Review",
-        value: tasks.filter(
-          (t) => t.status === "REVIEW"
-        ).length,
-      },
-      {
-        name: "Completed",
-        value: completedTasks.length,
-      },
-    ];
-
     return {
       productivityScore,
       productivityLabel,
@@ -205,7 +180,6 @@ export default function useAnalytics() {
 
       completionByPriority,
 
-      statusChart,
     };
   }, [tasks]);
 

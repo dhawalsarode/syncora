@@ -27,7 +27,16 @@ function timeAgo(date: string) {
     return `${Math.floor(seconds / 3600)} hr ago`;
   if (seconds < 172800) return "Yesterday";
 
-  return `${Math.floor(seconds / 86400)} days ago`;
+  const days = Math.floor(seconds / 86400);
+
+    if (days <= 7) {
+      return `${days} days ago`;
+    }
+
+    return new Date(date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
 }
 
 export default function NotificationBell() {
@@ -96,22 +105,28 @@ export default function NotificationBell() {
       <button
         onClick={() => setOpen((v) => !v)}
         className="
-          relative
           h-11
           w-11
           rounded-xl
           border
           border-slate-200
           dark:border-slate-700
+          bg-white
+          dark:bg-slate-900
           flex
           items-center
           justify-center
+          text-slate-700
+          dark:text-slate-200
           hover:bg-slate-100
           dark:hover:bg-slate-800
-          transition
+          transition-colors
         "
       >
-        <Bell size={19} />
+        <Bell
+              size={19}
+              className="text-slate-700 dark:text-slate-200"
+            />
 
         {unread > 0 && (
           <span
@@ -172,6 +187,11 @@ export default function NotificationBell() {
           >
             <h3 className="font-semibold">
               Notifications
+              {unread > 0 && (
+                <span className="ml-2 rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300">
+                  {unread} new
+                </span>
+              )}
             </h3>
 
             {unread > 0 && (
@@ -185,7 +205,6 @@ export default function NotificationBell() {
 
                 Toast.success("All notifications marked as read.");
 
-                setOpen(false);
               }}
                 className="
                   text-sm
@@ -204,8 +223,21 @@ export default function NotificationBell() {
           <div className="max-h-96 overflow-y-auto">
 
             {notifications.length === 0 ? (
-              <div className="p-8 text-center text-sm text-slate-500">
-                No notifications
+              <div className="flex flex-col items-center justify-center px-8 py-10">
+
+                <Bell
+                  size={34}
+                  className="mb-3 text-slate-300 dark:text-slate-600"
+                />
+
+                <p className="font-medium text-slate-700 dark:text-slate-200">
+                  You're all caught up
+                </p>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  No new notifications.
+                </p>
+
               </div>
             ) : (
               notifications.map((n) => (
@@ -230,16 +262,35 @@ export default function NotificationBell() {
                     px-5
                     py-4
                     text-left
-                    transition
-                    hover:bg-slate-50
+                    transition-all
+                    duration-200
+                  hover:bg-slate-50
+                    hover:translate-x-1
                     dark:hover:bg-slate-800
                     ${
                       !n.read
-                        ? "bg-blue-50 dark:bg-blue-950/30"
+                        ? "bg-indigo-50 dark:bg-indigo-950/30"
                         : ""
                     }
                   `}
                 >
+              <div className="flex items-start gap-3">
+
+                {!n.read && (
+                  <span
+                    className="
+                      mt-2
+                      h-2.5
+                      w-2.5
+                      flex-shrink-0
+                      rounded-full
+                      bg-indigo-600
+                    "
+                  />
+                )}
+
+                <div className="flex-1">
+
                   <p className="text-sm font-medium">
                     {n.message}
                   </p>
@@ -247,6 +298,10 @@ export default function NotificationBell() {
                   <p className="mt-2 text-xs text-slate-500">
                     {timeAgo(n.createdAt)}
                   </p>
+
+                </div>
+
+              </div>
                 </button>
               ))
             )}

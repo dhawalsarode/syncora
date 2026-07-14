@@ -83,24 +83,34 @@ export default function Navbar() {
         <button
           onClick={toggleTheme}
           className="
-            h-11
-            w-11
-            rounded-xl
-            border
-            border-slate-200
-            dark:border-slate-700
-            flex
-            items-center
-            justify-center
-            hover:bg-slate-100
-            dark:hover:bg-slate-800
-            transition
-          "
+                      h-11
+                      w-11
+                      rounded-xl
+                      border
+                      border-slate-200
+                      dark:border-slate-700
+                      bg-white
+                      dark:bg-slate-900
+                      flex
+                      items-center
+                      justify-center
+                      text-slate-700
+                      dark:text-slate-200
+                      hover:bg-slate-100
+                      dark:hover:bg-slate-800
+                      transition-colors
+                    "
         >
           {theme === "dark" ? (
-            <Sun size={19} />
+            <Sun
+                size={19}
+                className="text-amber-400"
+              />
           ) : (
-            <Moon size={19} />
+            <Moon
+                  size={19}
+                  className="text-slate-700 dark:text-slate-200"
+                />
           )}
         </button>
 
