@@ -81,20 +81,10 @@ export default function useAnalytics() {
         ? 0
         : Math.round((overdue / tasks.length) * 100);
 
-    const productivityScore =
-      Math.max(
-        0,
-        Math.round(completionRate - overdueRate * 0.5)
-      );
+    const productivityScore = completionRate;
 
     const productivityLabel =
-      productivityScore >= 90
-        ? "Excellent"
-        : productivityScore >= 75
-        ? "Good"
-        : productivityScore >= 50
-        ? "Fair"
-        : "Needs Attention";
+      `${completedTasks.length} of ${tasks.length} tasks completed`;
 
     const averageCompletionTime =
       completedTasks.length === 0
