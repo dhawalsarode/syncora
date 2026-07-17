@@ -16,6 +16,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const [error, setError] = useState("");
 
@@ -45,12 +46,19 @@ const RegisterPage = () => {
     return "";
   };
 
-  const validatePassword = (value: string) => {
-    if (!PASSWORD_REGEX.test(value)) {
-      return "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number.";
-    }
+  const getPasswordChecks = (value: string) => ({
+    minLength: value.length >= 8,
+    uppercase: /[A-Z]/.test(value),
+    lowercase: /[a-z]/.test(value),
+    number: /\d/.test(value),
+  });
 
-    return "";
+  const validatePassword = (value: string) => {
+    const checks = getPasswordChecks(value);
+
+    return Object.values(checks).every(Boolean)
+      ? ""
+      : "Invalid password";
   };
 
   const validate = () => {
@@ -80,6 +88,7 @@ const RegisterPage = () => {
       return true;
     };
 
+  const passwordChecks = getPasswordChecks(password);
   const isFormInvalid =
     loading ||
     !name.trim() ||
@@ -228,6 +237,7 @@ const RegisterPage = () => {
         "
         placeholder="Password"
         value={password}
+        onFocus={() => setPasswordFocused(true)}
         onChange={(e) => {
           const value = e.target.value;
           setPassword(value);
@@ -257,11 +267,52 @@ const RegisterPage = () => {
       </button>
     </div>
 
-    {passwordError && (
-      <p className="mt-2 text-sm text-red-500">
-        {passwordError}
+    {passwordFocused && (
+    <div className="mt-2 space-y-1 text-sm">
+
+      <p
+        className={
+          passwordChecks.minLength
+            ? "text-green-600"
+            : "text-red-500"
+        }
+      >
+        {passwordChecks.minLength ? "✓" : "✗"} At least 8 characters
       </p>
+
+      <p
+        className={
+          passwordChecks.uppercase
+            ? "text-green-600"
+            : "text-red-500"
+        }
+      >
+        {passwordChecks.uppercase ? "✓" : "✗"} One uppercase letter
+      </p>
+
+      <p
+        className={
+          passwordChecks.lowercase
+            ? "text-green-600"
+            : "text-red-500"
+        }
+      >
+        {passwordChecks.lowercase ? "✓" : "✗"} One lowercase letter
+      </p>
+
+      <p
+        className={
+          passwordChecks.number
+            ? "text-green-600"
+            : "text-red-500"
+        }
+      >
+        {passwordChecks.number ? "✓" : "✗"} One number
+      </p>
+
+    </div>
     )}
+
         <div>
           <input
             type={showPassword ? "text" : "password"}
