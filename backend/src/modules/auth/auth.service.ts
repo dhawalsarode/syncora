@@ -2,11 +2,42 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../../prisma.js";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
 export class AuthService {
-  static async register(name: string, email: string, password: string) {
-    const existing = await prisma.user.findUnique({ where: { email } });
+  static async register(
+    name: string,
+    email: string,
+    password: string
+  ) {
+    name = name.trim();
+    email = email.trim().toLowerCase();
+
+    if (name.length < 3 || name.length > 40) {
+      throw new Error(
+        "Name must be between 3 and 40 characters."
+      );
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      throw new Error(
+        "Please enter a valid email address."
+      );
+    }
+
+    if (!PASSWORD_REGEX.test(password)) {
+      throw new Error(
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number."
+      );
+    }
+
+    const existing = await prisma.user.findUnique({
+      where: { email },
+    });
     if (existing) {
-      throw new Error("User already exists");
+      throw new Error("User already exists.");
     }
 
     const hashed = await bcrypt.hash(password, 10);
@@ -18,6 +49,16 @@ export class AuthService {
   }
 
   static async login(email: string, password: string) {
+    email = email.trim().toLowerCase();
+
+      if (!EMAIL_REGEX.test(email)) {
+        throw new Error("Please enter a valid email address.");
+      }
+
+      if (!password.trim()) {
+        throw new Error("Password is required.");
+      }
+      
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) throw new Error("Invalid credentials");
 
@@ -82,7 +123,12 @@ static async changePassword(
   if (!valid) {
     throw new Error("Current password is incorrect");
   }
-
+  
+  if (!PASSWORD_REGEX.test(newPassword)) {
+  throw new Error(
+    "New password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number."
+  );
+}
   const hashed = await bcrypt.hash(
     newPassword,
     10

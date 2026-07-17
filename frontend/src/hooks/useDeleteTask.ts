@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTask } from "../api/tasks";
 import { Task } from "../types/task";
+import { Toast } from "../lib/toast";
 
 export function useDeleteTask() {
   const queryClient = useQueryClient();
@@ -26,6 +27,10 @@ export function useDeleteTask() {
       if (ctx?.previous) {
         queryClient.setQueryData(["tasks"], ctx.previous);
       }
+    },
+
+    onSuccess: () => {
+      Toast.success("Task deleted successfully.");
     },
 
     onSettled: () => {

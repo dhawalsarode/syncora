@@ -6,29 +6,120 @@ import AuthLayout from "../auth/AuthLayout";
 import { Toast } from "../lib/toast";
 
 const RegisterPage = () => {
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
+  const [error, setError] = useState("");
+
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const validateName = (value: string) => {
+    if (value.trim().length < 3) {
+      return "Name must be at least 3 characters.";
+    }
+
+    if (value.trim().length > 40) {
+      return "Name cannot exceed 40 characters.";
+    }
+
+    return "";
+  };
+
+  const validateEmail = (value: string) => {
+    if (!EMAIL_REGEX.test(value.trim())) {
+      return "Please enter a valid email address.";
+    }
+
+    return "";
+  };
+
+  const validatePassword = (value: string) => {
+    if (!PASSWORD_REGEX.test(value)) {
+      return "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number.";
+    }
+
+    return "";
+  };
+
+  const validate = () => {
+    const nameErr = validateName(name);
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+
+    const confirmPasswordErr =
+      password === confirmPassword
+        ? ""
+        : "Passwords do not match.";
+
+    setNameError(nameErr);
+    setEmailError(emailErr);
+    setPasswordError(passwordErr);
+    setConfirmPasswordError(confirmPasswordErr);
+
+    if (
+      nameErr ||
+      emailErr ||
+      passwordErr ||
+      confirmPasswordErr
+    ) {
+      return false;
+    }
+
+      return true;
+    };
+
+  const isFormInvalid =
+    loading ||
+    !name.trim() ||
+    !email.trim() ||
+    !password ||
+    !confirmPassword ||
+    !!nameError ||
+    !!emailError ||
+    !!passwordError ||
+    !!confirmPasswordError;
+    
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    setLoading(true);
-    try {
-      await api.post("/auth/register", { name, email, password });
-      navigate("/login");
-      Toast.success("Account created successfully.");
-    } catch {
-      setError("Registration failed");
-      Toast.error("Registration failed.");
-      setLoading(false);
+    if (!validate()) {
+      return;
     }
+
+    setLoading(true);
+
+  try {
+    await api.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
+
+    Toast.success("Account created successfully.");
+    navigate("/login");
+  } catch (err: any) {
+    const message =
+      err.response?.data?.message ??
+      "Registration failed.";
+
+    setError(message);
+    Toast.error(message);
+  } finally {
+    setLoading(false);
+  }
   };
 
   return (
@@ -49,7 +140,11 @@ const RegisterPage = () => {
         <input
           placeholder="Full Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setName(value);
+            setNameError(validateName(value));
+          }}
           required
           className="
             w-full
@@ -69,11 +164,21 @@ const RegisterPage = () => {
             focus:ring-[#6D5CFF]/10
           "
         />
+
+        {nameError && (
+          <p className="mt-2 text-sm text-red-500">
+            {nameError}
+          </p>
+        )}
 
         <input
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setEmail(value);
+            setEmailError(validateEmail(value));
+          }}
           required
           className="
             w-full
@@ -94,9 +199,85 @@ const RegisterPage = () => {
           "
         />
 
-        <div className="relative">
+        {emailError && (
+          <p className="mt-2 text-sm text-red-500">
+            {emailError}
+          </p>
+        )}
+
+    <div className="relative">
+      <input
+        type={showPassword ? "text" : "password"}
+        className="
+          w-full
+          rounded-xl
+          border
+          border-slate-200
+          bg-white/70
+          px-5
+          py-4
+          pr-14
+          text-base
+          placeholder:text-slate-400
+          outline-none
+          transition-all
+          duration-200
+          focus:border-[#6D5CFF]
+          focus:ring-4
+          focus:ring-[#6D5CFF]/10
+        "
+        placeholder="Password"
+        value={password}
+        onChange={(e) => {
+          const value = e.target.value;
+          setPassword(value);
+          setPasswordError(validatePassword(value));
+        }}
+        required
+      />
+
+      <button
+        type="button"
+        onClick={() => setShowPassword((v) => !v)}
+        className="
+          absolute
+          right-4
+          top-1/2
+          -translate-y-1/2
+          text-slate-500
+          hover:text-[#6D5CFF]
+          transition
+        "
+      >
+        {showPassword ? (
+          <EyeOff size={20} />
+        ) : (
+          <Eye size={20} />
+        )}
+      </button>
+    </div>
+
+    {passwordError && (
+      <p className="mt-2 text-sm text-red-500">
+        {passwordError}
+      </p>
+    )}
+        <div>
           <input
             type={showPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => {
+              const value = e.target.value;
+              setConfirmPassword(value);
+
+              setConfirmPasswordError(
+                password === value
+                  ? ""
+                  : "Passwords do not match."
+              );
+            }}
+            required
             className="
               w-full
               rounded-xl
@@ -105,7 +286,6 @@ const RegisterPage = () => {
               bg-white/70
               px-5
               py-4
-              pr-14
               text-base
               placeholder:text-slate-400
               outline-none
@@ -115,36 +295,17 @@ const RegisterPage = () => {
               focus:ring-4
               focus:ring-[#6D5CFF]/10
             "
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
           />
 
-          <button
-            type="button"
-            onClick={() => setShowPassword((v) => !v)}
-            className="
-              absolute
-              right-4
-              top-1/2
-              -translate-y-1/2
-              text-slate-500
-              hover:text-[#6D5CFF]
-              transition
-            "
-          >
-            {showPassword ? (
-              <EyeOff size={20} />
-            ) : (
-              <Eye size={20} />
-            )}
-          </button>
+          {confirmPasswordError && (
+            <p className="mt-2 text-sm text-red-500">
+              {confirmPasswordError}
+            </p>
+          )}
         </div>
-
         <button
           type="submit"
-          disabled={loading}
+          disabled={isFormInvalid}
           className="
             flex
             w-full

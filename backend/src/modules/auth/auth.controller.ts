@@ -25,10 +25,11 @@ export class AuthController {
     });
 
       res.json({ user });
-    } catch {
-      res.status(401).json({ message: "Invalid credentials" });
-    }
-  }
+      } catch (err: any) {
+        res.status(401).json({
+          message: err.message,
+        });
+      }}
 
   static async me(req: Request, res: Response) {
     const userId = req.user?.id;

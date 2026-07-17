@@ -63,7 +63,7 @@ export const AuthProvider = ({
     } finally {
       setUser(null);
       socket.disconnect();
-      Toast.success("Task deleted.");
+      Toast.success("You have been logged out.");
       window.location.href = "/login";
     }
   };
