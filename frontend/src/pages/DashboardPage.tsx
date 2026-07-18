@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 
 import StatsGrid from "../components/dashboard/StatsGrid";
 import AnalyticsChart from "../components/dashboard/AnalyticsChart";
-import ProgressChart from "../components/dashboard/ProgressChart";
+import MyWorkspaceCard from "../components/dashboard/MyWorkspaceCard";
 import { useAuth } from "../auth/AuthContext";
 import RecentTasks from "../components/dashboard/RecentTasks";
 import UpcomingDeadlines from "../components/dashboard/UpcomingDeadlines";
@@ -68,12 +68,15 @@ const DashboardPage = () => {
 
       <section className="grid gap-6 xl:grid-cols-2">
 
-      <AnalyticsChart
-        data={statusChart}
+      <MyWorkspaceCard
+        assigned={stats.assignedToMe}
+        completed={stats.completedByMe}
+        created={stats.createdByMe}
+        closed={stats.closedTasks}
       />
 
-      <ProgressChart
-        percentage={stats.completionRate}
+      <AnalyticsChart
+        data={statusChart}
       />
 
       </section>

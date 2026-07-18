@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useAuth } from "../auth/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 
 import api from "../api/client";
@@ -10,6 +11,8 @@ const fetchTasks = async (): Promise<Task[]> => {
 };
 
 export default function useDashboard() {
+  const { user } = useAuth();
+
   const { data: tasks = [], isLoading } = useQuery({
     queryKey: ["tasks"],
     queryFn: fetchTasks,
@@ -52,6 +55,26 @@ export default function useDashboard() {
         due.getFullYear() === now.getFullYear()
       );
     }).length;
+
+  const assignedToMe = tasks.filter(
+    (task) => task.assignedToId === user?.id
+  ).length;
+
+  const completedByMe = tasks.filter(
+    (task) =>
+      task.assignedToId === user?.id &&
+      task.status === "COMPLETED"
+  ).length;
+
+  const createdByMe = tasks.filter(
+    (task) => task.creatorId === user?.id
+  ).length;
+
+  const closedTasks = tasks.filter(
+    (task) =>
+      task.creatorId === user?.id &&
+      task.status === "COMPLETED"
+  ).length;
 
     const completionRate =
       totalTasks === 0
@@ -189,7 +212,11 @@ export default function useDashboard() {
         todo,
         overdue,
         today,
-        completionRate,
+        completionRate,              
+        assignedToMe,
+        completedByMe,
+        createdByMe,
+        closedTasks,
       },
 
       statusChart,
