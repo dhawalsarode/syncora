@@ -9,7 +9,7 @@ import {
   Bar,
 } from "recharts";
 
-import AnalyticsCard from "./AnalyticsCard";
+import AnalyticsCard from "../analytics/AnalyticsCard";
 
 const mockData = [
   { hour: "12 AM", assigned: 0, created: 0 },
