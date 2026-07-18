@@ -156,7 +156,24 @@ export default function useAnalytics() {
         ).length,
       },
     ];
-
+    const workflowOverview = [
+      {
+        name: "To Do",
+        value: tasks.filter((t) => t.status === "TODO").length,
+      },
+      {
+        name: "In Progress",
+        value: tasks.filter((t) => t.status === "IN_PROGRESS").length,
+      },
+      {
+        name: "Review",
+        value: tasks.filter((t) => t.status === "REVIEW").length,
+      },
+      {
+        name: "Completed",
+        value: tasks.filter((t) => t.status === "COMPLETED").length,
+      },
+    ];
     return {
       productivityScore,
       productivityLabel,
@@ -169,6 +186,7 @@ export default function useAnalytics() {
       priorityChart,
 
       completionByPriority,
+      workflowOverview,
 
     };
   }, [tasks]);
