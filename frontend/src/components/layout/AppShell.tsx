@@ -1,15 +1,29 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 export default function AppShell() {
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex h-screen bg-slate-100 dark:bg-slate-950">
 
       {/* Sidebar */}
 
-      <Sidebar />
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
+
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* Right Side */}
 
@@ -17,7 +31,10 @@ export default function AppShell() {
 
         {/* Top Navigation */}
 
-        <Navbar />
+        <Navbar
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
 
         {/* Main Content */}
 

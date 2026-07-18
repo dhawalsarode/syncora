@@ -1,5 +1,5 @@
 import {
-  Bell,
+  Menu,
   Moon,
   Sun,
   Search,
@@ -8,8 +8,17 @@ import {
 import { useTheme } from "../../theme/ThemeContext";
 import { useAuth } from "../../auth/AuthContext";
 import NotificationBell from "../NotificationBell";
+import type { Dispatch, SetStateAction } from "react";
 
-export default function Navbar() {
+  type NavbarProps = {
+    sidebarOpen: boolean;
+    setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+  };
+
+export default function Navbar({
+    setSidebarOpen,
+  }: NavbarProps) {
+
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
 
@@ -30,14 +39,39 @@ export default function Navbar() {
     >
       {/* Left */}
 
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
-          Dashboard
-        </h1>
+      <div className="flex items-center gap-3">
 
-        <p className="text-xs text-slate-500">
-          Welcome back, {user?.name}
-        </p>
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="
+            lg:hidden
+            h-10
+            w-10
+            rounded-lg
+            border
+            border-slate-200
+            dark:border-slate-700
+            flex
+            items-center
+            justify-center
+            hover:bg-slate-100
+            dark:hover:bg-slate-800
+            transition
+          "
+        >
+          <Menu size={22} />
+        </button>
+
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+            Dashboard
+          </h1>
+
+          <p className="text-xs text-slate-500">
+            Welcome back, {user?.name}
+          </p>
+        </div>
+
       </div>
 
       {/* Right */}

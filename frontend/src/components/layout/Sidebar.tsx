@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
+import type { Dispatch, SetStateAction } from "react";
 
 import { useAuth } from "../../auth/AuthContext";
 
@@ -35,22 +36,42 @@ const navItems = [
   },
 ];
 
-export default function Sidebar() {
+  type SidebarProps = {
+    sidebarOpen: boolean;
+    setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+  };
+
+  export default function Sidebar({
+    sidebarOpen,
+    setSidebarOpen,
+  }: SidebarProps) {
   const { user, logout } = useAuth();
 
   return (
     <aside
-      className="
-        w-[270px]
-        shrink-0
-        border-r
-        border-slate-200
-        dark:border-slate-800
-        bg-white
-        dark:bg-slate-900
-        flex
-        flex-col
-      "
+      className={`
+                  fixed
+                  inset-y-0
+                  left-0
+                  z-50
+                  w-[270px]
+                  border-r
+                  border-slate-200
+                  dark:border-slate-800
+                  bg-white
+                  dark:bg-slate-900
+                  flex
+                  flex-col
+                  transform
+                  transition-transform
+                  duration-300
+                  ${
+                    sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                  }
+                  lg:static
+                  lg:translate-x-0
+                  lg:shrink-0
+                `}
     >
       {/* Logo */}
 
