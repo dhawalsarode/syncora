@@ -160,7 +160,7 @@ const navItems = [
             {user?.name}
           </h3>
 
-          <p className="text-sm text-slate-500 truncate">
+          <p title={user?.email} className="text-sm text-slate-500 truncate">
             {user?.email}
           </p>
 
