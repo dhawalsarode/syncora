@@ -6,6 +6,7 @@ import {
   User,
   UserRound,
   X,
+  CheckCircle2,
 } from "lucide-react";
 
 import { Task } from "../types/task";
@@ -36,17 +37,31 @@ const STATUS_STYLES = {
     "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
 };
 
+const STATUS_LABELS = {
+  TODO: "To Do",
+  IN_PROGRESS: "In Progress",
+  REVIEW: "Review",
+  COMPLETED: "Completed",
+} as const;
+
 function formatDate(date?: string | null) {
   if (!date) return "—";
 
-  return new Date(date).toLocaleString("en-GB", {
+  const d = new Date(date);
+
+  const day = d.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
+  });
+
+  const time = d.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   });
+
+  return `${day} • ${time}`;
 }
 
 export default function TaskDetailsModal({
@@ -100,21 +115,27 @@ export default function TaskDetailsModal({
 
           <div>
 
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+            <h2 className="text-2xl font-bold break-words text-slate-900 dark:text-white">
               {task.title}
             </h2>
 
             <div className="mt-4 flex flex-wrap gap-3">
 
               <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLES[task.status]}`}
+                className={` flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold
+                  ${STATUS_STYLES[task.status]}
+                `}
               >
-                {task.status.replace("_", " ")}
+                <CheckCircle2 size={12} />
+                {STATUS_LABELS[task.status]}
               </span>
 
               <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${PRIORITY_STYLES[task.priority]}`}
+                className={` flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold
+                  ${PRIORITY_STYLES[task.priority]}
+                `}
               >
+                <Flag size={12} />
                 {task.priority}
               </span>
 
@@ -168,6 +189,19 @@ export default function TaskDetailsModal({
           />
 
         </div>
+
+        <div className="border-t border-slate-200 dark:border-slate-700 px-7 py-6">
+
+        <div className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+          <Clock3 size={17} />
+          Last Updated
+        </div>
+
+        <div className="mt-2 text-base font-semibold text-slate-900 dark:text-white">
+          {formatDate(task.updatedAt)}
+        </div>
+
+      </div>
 
         {/* Description */}
 
