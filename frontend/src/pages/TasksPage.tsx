@@ -8,6 +8,7 @@ import KanbanColumn from "../components/tasks/KanbanColumn";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import { useDeleteTask } from "../hooks/useDeleteTask";
+import TaskDetailsModal from "../components/TaskDetailsModal";
 
 export default function TasksPage() {
   const { data: tasks = [], isLoading } = useTasks();
@@ -15,6 +16,7 @@ export default function TasksPage() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [viewTask, setViewTask] = useState<any>(null);
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
 
@@ -96,30 +98,46 @@ export default function TasksPage() {
 
         <div className="relative mb-6">
 
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary"
-          />
+      <Search
+        size={18}
+        className="
+          absolute
+          left-4
+          top-1/2
+          -translate-y-1/2
+          text-slate-400
+          dark:text-slate-500
+        "
+      />
 
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search tasks..."
-            className="
-              h-12
-              w-full
-              rounded-2xl
-              border
-              border-slate-200
-              bg-white
-              pl-11
-              pr-4
-              outline-none
-              dark:border-slate-700
-              dark:bg-slate-900
-            "
-          />
-
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search tasks..."
+        className="
+          h-12
+          w-full
+          rounded-2xl
+          border
+          border-slate-200
+          dark:border-slate-700
+          bg-white
+          dark:bg-slate-900
+          pl-11
+          pr-4
+          text-slate-900
+          dark:text-white
+          placeholder:text-slate-400
+          dark:placeholder:text-slate-500
+          caret-slate-900
+          dark:caret-white
+          outline-none
+          transition
+          focus:ring-2
+          focus:ring-primary/20
+          focus:border-primary
+        "
+      />
         </div>
       </div>
 
@@ -140,6 +158,7 @@ export default function TasksPage() {
           tasks={filteredTasks.filter(
             (t) => t.status === "TODO"
           )}
+          onView={(task) => setViewTask(task)}
           onEdit={(task) => {
             setSelectedTask(task);
             setShowModal(true);
@@ -157,6 +176,7 @@ export default function TasksPage() {
           tasks={filteredTasks.filter(
             (t) => t.status === "IN_PROGRESS"
           )}
+          onView={(task) => setViewTask(task)}
           onEdit={(task) => {
             setSelectedTask(task);
             setShowModal(true);
@@ -174,6 +194,7 @@ export default function TasksPage() {
           tasks={filteredTasks.filter(
             (t) => t.status === "REVIEW"
           )}
+          onView={(task) => setViewTask(task)}
           onEdit={(task) => {
             setSelectedTask(task);
             setShowModal(true);
@@ -191,6 +212,7 @@ export default function TasksPage() {
           tasks={filteredTasks.filter(
             (t) => t.status === "COMPLETED"
           )}
+          onView={(task) => setViewTask(task)}
           onEdit={(task) => {
             setSelectedTask(task);
             setShowModal(true);
@@ -211,6 +233,18 @@ export default function TasksPage() {
           onClose={() => {
             setSelectedTask(null);
             setShowModal(false);
+          }}
+        />
+      )}
+
+      {viewTask && (
+        <TaskDetailsModal
+          task={viewTask}
+          onClose={() => setViewTask(null)}
+          onEdit={(task) => {
+            setViewTask(null);
+            setSelectedTask(task);
+            setShowModal(true);
           }}
         />
       )}

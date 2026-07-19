@@ -20,6 +20,7 @@ interface Props {
   status: TaskStatus;
   title: string;
   tasks: Task[];
+  onView: (task: Task) => void;
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
 }
@@ -70,6 +71,7 @@ export default function KanbanColumn({
   status,
   title,
   tasks,
+  onView,
   onEdit,
   onDelete,
 }: Props) {
@@ -175,6 +177,7 @@ export default function KanbanColumn({
                   >
                     <TaskCard
                       task={task}
+                      onView={onView}
                       onEdit={onEdit}
                       onDelete={onDelete}
                     />

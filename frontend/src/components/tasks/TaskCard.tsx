@@ -18,34 +18,37 @@ const PRIORITY_COLORS = {
 
 interface Props {
   task: Task;
+  onView: (task: Task) => void;
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
 }
 
 export default function TaskCard({
   task,
+  onView,
   onEdit,
   onDelete,
 }: Props) {
   return (
-    <div
+      <div
+        onClick={() => onView(task)}
         className="
-        group
-        rounded-2xl
-        border
-        border-slate-200
-        dark:border-slate-700
-        bg-white
-        dark:bg-slate-800
-        p-3.5
-        shadow-sm
-        transition-shadow
-        duration-200
-        hover:shadow-xl
-        cursor-grab
-        active:cursor-grabbing
+          group
+          rounded-2xl
+          border
+          border-slate-200
+          dark:border-slate-700
+          bg-white
+          dark:bg-slate-800
+          p-3.5
+          shadow-sm
+          transition-all
+          duration-200
+          hover:shadow-xl
+          hover:-translate-y-0.5
+          cursor-pointer
         "
-    >
+      >
       {/* Header */}
 
       <div className="flex justify-between items-start gap-3">
@@ -55,7 +58,10 @@ export default function TaskCard({
 
         <div className="flex gap-1 shrink-0">
           <button
-            onClick={() => onEdit(task)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(task);
+            }}
             className="
               rounded-xl
               p-2
@@ -71,7 +77,10 @@ export default function TaskCard({
           </button>
 
           <button
-            onClick={() => onDelete(task.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(task.id);
+            }}
             className="
               rounded-xl
               p-2
