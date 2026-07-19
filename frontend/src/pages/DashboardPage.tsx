@@ -8,6 +8,10 @@ import RecentTasks from "../components/dashboard/RecentTasks";
 import UpcomingDeadlines from "../components/dashboard/UpcomingDeadlines";
 import TodayAssignedVsCreated from "../components/dashboard/TodayAssignedVsCreated";
 import useAnalytics from "../hooks/useAnalytics";
+import { useState } from "react";
+import { Task } from "../types/task";
+import TaskDetailsModal from "../components/TaskDetailsModal";
+import CreateTaskModal from "../components/CreateTaskModal";
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -28,6 +32,9 @@ const DashboardPage = () => {
   } = useDashboard();
 
   const analytics = useAnalytics();
+  const [viewTask, setViewTask] = useState<Task | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   if (loading) {
     return (
@@ -87,12 +94,38 @@ const DashboardPage = () => {
 
       <section className="grid gap-6 xl:grid-cols-2">
 
-        <UpcomingDeadlines tasks={upcomingTasks} />
+        <UpcomingDeadlines
+          tasks={upcomingTasks}
+          onView={setViewTask}
+        />
 
-        <RecentTasks tasks={recentTasks} />
+        <RecentTasks
+          tasks={recentTasks}
+          onView={setViewTask}
+        />
 
       </section>
-
+      {viewTask && (
+        <TaskDetailsModal
+          task={viewTask}
+          onClose={() => setViewTask(null)}
+          onEdit={(task) => {
+            setViewTask(null);
+            setSelectedTask(task);
+            setShowModal(true);
+          }}
+        />
+      )}
+      {showModal && (
+      <CreateTaskModal
+        task={selectedTask ?? undefined}
+        onClose={() => {
+          setSelectedTask(null);
+          setShowModal(false);
+        }}
+      />
+    )}
+    
     </div>
   );
 };

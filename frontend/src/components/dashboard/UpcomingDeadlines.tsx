@@ -2,6 +2,7 @@ import { Task } from "../../types/task";
 
 interface Props {
   tasks: Task[];
+  onView: (task: Task) => void;
 }
 
 const priorityStyle = {
@@ -27,6 +28,7 @@ const priorityDot = {
 
 export default function UpcomingDeadlines({
   tasks,
+  onView,
 }: Props) {
   const today = new Date();
 
@@ -91,6 +93,7 @@ export default function UpcomingDeadlines({
             return (
               <div
                 key={task.id}
+                onClick={() => onView(task)}
                 className="
                   flex
                   items-center
@@ -98,6 +101,7 @@ export default function UpcomingDeadlines({
                   px-6
                   py-4
                   transition-colors
+                  cursor-pointer
                   hover:bg-slate-50
                   dark:hover:bg-slate-800/40
                 "

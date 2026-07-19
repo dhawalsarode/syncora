@@ -2,6 +2,7 @@ import { Task } from "../../types/task";
 
 interface Props {
   tasks: Task[];
+  onView: (task: Task) => void;
 }
 
 const statusStyle = {
@@ -20,6 +21,7 @@ const statusStyle = {
 
 export default function RecentTasks({
   tasks,
+  onView,
 }: Props) {
   return (
     <section
@@ -55,6 +57,7 @@ export default function RecentTasks({
           tasks.map((task) => (
             <div
               key={task.id}
+              onClick={() => onView(task)}
               className="
                 flex
                 items-center
@@ -62,6 +65,7 @@ export default function RecentTasks({
                 px-6
                 py-4
                 transition-colors
+                cursor-pointer
                 hover:bg-slate-50
                 dark:hover:bg-slate-800/40
               "
