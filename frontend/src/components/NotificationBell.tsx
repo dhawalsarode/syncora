@@ -39,7 +39,13 @@ function timeAgo(date: string) {
     });
 }
 
-export default function NotificationBell() {
+interface Props {
+  onViewTask?: (taskId: string) => void;
+}
+
+export default function NotificationBell({
+  onViewTask,
+}: Props) {
   const [open, setOpen] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
@@ -246,7 +252,10 @@ export default function NotificationBell() {
                   onClick={async () => {
                     if (!n.read) {
                       await markNotificationRead(n.id);
-
+                    if (n.taskId && onViewTask) {
+                      onViewTask(n.taskId);
+                      setOpen(false);
+                    }  
                       queryClient.invalidateQueries({
                         queryKey: ["notifications"],
                       });

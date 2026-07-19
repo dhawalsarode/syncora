@@ -40,7 +40,8 @@ export class TaskService {
       console.log("Creating notification for:", task.assignedToId);
       await NotificationService.create(
         task.assignedToId,
-        `${task.creator.name} assigned you a task: "${task.title}"`
+        `${task.creator.name} assigned you a task: "${task.title}"`,
+        task.id
       );
     }
     if (io) {
@@ -134,7 +135,8 @@ export class TaskService {
     ) {
       await NotificationService.create(
         task.assignedToId,
-        `${task.creator.name} assigned you a task: "${task.title}"`
+        `${task.creator.name} assigned you a task: "${task.title}"`,
+        task.id
       );
     }
     if (io) {

@@ -2,11 +2,16 @@ import { prisma } from "../../prisma.js";
 import { getIO } from "../../sockets/socket.js";
 
 export class NotificationService {
-  static async create(userId: string, message: string) {
+  static async create(
+    userId: string,
+    message: string,
+    taskId?: string
+  ) {
     const notification = await prisma.notification.create({
       data: {
         userId,
         message,
+        taskId,
       },
     });
 

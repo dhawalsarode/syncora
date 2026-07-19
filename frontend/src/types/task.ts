@@ -19,8 +19,9 @@ export interface User {
 export interface Notification {
   id: string;
   message: string;
+  read: boolean;
   createdAt: string;
-  read?: boolean;
+  taskId?: string | null;
 }
 
 export interface Task {

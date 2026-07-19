@@ -5,6 +5,7 @@ export interface Notification {
   message: string;
   read: boolean;
   createdAt: string;
+  taskId?: string | null;
 }
 
 export const fetchNotifications = async (): Promise<Notification[]> => {
