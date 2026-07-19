@@ -8,7 +8,9 @@ import {
   Bar,
 } from "recharts";
 
+import ChartTooltip from "./ChartTooltip";
 import AnalyticsCard from "./AnalyticsCard";
+import { CHART_CONFIG } from "../../constants/chart";
 
 interface AssignedStatusData {
   status: string;
@@ -25,36 +27,32 @@ export default function AssignedStatusChart({ data }: Props) {
       title="Assigned Tasks"
       subtitle="Tasks assigned to you by status"
     >
-      <div className="h-72">
+      <div className="h-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            margin={{
-              top: 10,
-              right: 10,
-              left: -20,
-              bottom: 0,
-            }}
+            margin={CHART_CONFIG.margin}
           >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              vertical={false}
-            />
+            <CartesianGrid {...CHART_CONFIG.grid} />
 
             <XAxis
-                dataKey="status"
-                tick={{ fontSize: 12 }}
-                interval={0}
+              dataKey="status"
+              tick={CHART_CONFIG.tick}
+              interval={0}
             />
 
-            <YAxis allowDecimals={false} />
+            <YAxis
+              allowDecimals={false}
+              tick={CHART_CONFIG.tick}
+            />
 
-            <Tooltip />
+            <Tooltip content={<ChartTooltip />} />
 
             <Bar
               dataKey="tasks"
-              fill="#10B981" 
-              radius={[8, 8, 0, 0]}
+              fill="#10B981"
+              radius={CHART_CONFIG.bar.radius}
+              animationDuration={CHART_CONFIG.animation.duration}
             />
           </BarChart>
         </ResponsiveContainer>

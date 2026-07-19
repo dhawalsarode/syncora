@@ -12,8 +12,9 @@ export default function AnalyticsCard({
   children,
 }: AnalyticsCardProps) {
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-      <div className="mb-6">
+    <section className="flex h-[380px] flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+      {/* Header */}
+      <div className="mb-5 shrink-0">
         <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
           {title}
         </h2>
@@ -25,7 +26,10 @@ export default function AnalyticsCard({
         )}
       </div>
 
-      {children}
+      {/* Chart */}
+      <div className="min-h-0 flex-1">
+        {children}
+      </div>
     </section>
   );
 }

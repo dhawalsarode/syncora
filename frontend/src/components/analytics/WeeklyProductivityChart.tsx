@@ -8,7 +8,10 @@ import {
   Tooltip,
 } from "recharts";
 
-import ChartCard from "../dashboard/ChartCard";
+import AnalyticsCard from "./AnalyticsCard";
+import ChartTooltip from "./ChartTooltip";
+import { CHART_CONFIG } from "../../constants/chart";
+import { getYAxisConfig } from "../../utils/chartUtils";
 
 interface Props {
   data: {
@@ -20,52 +23,53 @@ interface Props {
 export default function WeeklyProductivityChart({
   data,
 }: Props) {
+  const yAxis = getYAxisConfig(
+    data.map((d) => d.completed)
+  );
+
   return (
-    <ChartCard
+    <AnalyticsCard
       title="Weekly Productivity"
       subtitle="Tasks completed during the last 7 days"
     >
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={data}
-          margin={{
-            top: 10,
-            right: 10,
-            left: -20,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid
-            strokeDasharray="3 3"
-            vertical={false}
-          />
+      <div className="h-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={data}
+            margin={CHART_CONFIG.margin}
+          >
+            <CartesianGrid {...CHART_CONFIG.grid} />
 
-          <XAxis
-            dataKey="day"
-            tick={{ fontSize: 12 }}
-          />
+            <XAxis
+              dataKey="day"
+              tick={CHART_CONFIG.tick}
+            />
 
-          <YAxis
-            allowDecimals={false}
-            tick={{ fontSize: 12 }}
-          />
+            <YAxis
+              domain={yAxis.domain}
+              ticks={yAxis.ticks}
+              allowDecimals={false}
+              tick={CHART_CONFIG.tick}
+            />
 
-          <Tooltip />
+            <Tooltip content={<ChartTooltip />} />
 
-          <Line
-            type="monotone"
-            dataKey="completed"
-            stroke="#4F46E5"
-            strokeWidth={3}
-            dot={{
-              r: 5,
-            }}
-            activeDot={{
-              r: 7,
-            }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </ChartCard>
+            <Line
+              type="monotone"
+              dataKey="completed"
+              stroke="#4F46E5"
+              strokeWidth={CHART_CONFIG.line.strokeWidth}
+              dot={{
+                r: 5,
+              }}
+              activeDot={{
+                r: 7,
+              }}
+              animationDuration={CHART_CONFIG.animation.duration}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </AnalyticsCard>
   );
 }

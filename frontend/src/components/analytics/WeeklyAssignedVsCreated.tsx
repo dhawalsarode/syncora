@@ -10,6 +10,9 @@ import {
 } from "recharts";
 
 import AnalyticsCard from "./AnalyticsCard";
+import ChartTooltip from "./ChartTooltip";
+import { CHART_CONFIG } from "../../constants/chart";
+import { getYAxisConfig } from "../../utils/chartUtils";
 
 interface WeeklyAssignedVsCreatedData {
   day: string;
@@ -24,7 +27,7 @@ interface Props {
 const AssignedDot = (props: any) => {
   const { cx, cy, payload } = props;
 
-  if (cx == null || cy == null) return null;
+  if (cx == null || cy ==null) return null;
 
   const overlap = payload.assigned === payload.created;
 
@@ -61,25 +64,39 @@ const CreatedDot = (props: any) => {
 
 export default function WeeklyAssignedVsCreated({
   data,
-  }: Props) {
+}: Props) {
+  const yAxis = getYAxisConfig([
+    ...data.map((d) => d.assigned),
+    ...data.map((d) => d.created),
+  ]);
+
   return (
     <AnalyticsCard
       title="Weekly Performance"
-      subtitle="Completed tasks during the last 7 days"
+      subtitle="Assigned vs created tasks during the last 7 days"
     >
-      <div className="h-72">
+      <div className="h-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              vertical={false}
+          <LineChart
+            data={data}
+            margin={CHART_CONFIG.margin}
+          >
+            <CartesianGrid {...CHART_CONFIG.grid} />
+
+            <XAxis
+              dataKey="day"
+              tick={CHART_CONFIG.tick}
+              interval={0}
             />
 
-            <XAxis dataKey="day" />
+            <YAxis
+              domain={yAxis.domain}
+              ticks={yAxis.ticks}
+              allowDecimals={false}
+              tick={CHART_CONFIG.tick}
+            />
 
-            <YAxis allowDecimals={false} />
-
-            <Tooltip />
+            <Tooltip content={<ChartTooltip />} />
 
             <Legend />
 
@@ -91,6 +108,7 @@ export default function WeeklyAssignedVsCreated({
               dot={<AssignedDot />}
               activeDot={{ r: 7 }}
               name="Assigned"
+              animationDuration={CHART_CONFIG.animation.duration}
             />
 
             <Line
@@ -101,6 +119,7 @@ export default function WeeklyAssignedVsCreated({
               dot={<CreatedDot />}
               activeDot={{ r: 7 }}
               name="Created"
+              animationDuration={CHART_CONFIG.animation.duration}
             />
           </LineChart>
         </ResponsiveContainer>

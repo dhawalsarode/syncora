@@ -1,38 +1,28 @@
 import {
   ResponsiveContainer,
   BarChart,
-  CartesianGrid,
+  Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
-  Bar,
-  Cell,
 } from "recharts";
 
-import AnalyticsCard from "./AnalyticsCard";
+import AnalyticsCard from "../analytics/AnalyticsCard";
 import { CHART_CONFIG } from "../../constants/chart";
 
 interface Props {
   data: {
-    priority: string;
-    rate: number;
+    name: string;
+    value: number;
   }[];
 }
 
-const colors = [
-  "#22C55E",
-  "#3B82F6",
-  "#F59E0B",
-  "#EF4444",
-];
-
-export default function CompletionByPriorityChart({
-  data,
-}: Props) {
+export default function PriorityChart({ data }: Props) {
   return (
     <AnalyticsCard
-      title="Completion by Priority"
-      subtitle="Completion rate for each priority"
+      title="Priority Distribution"
+      subtitle="Tasks grouped by priority"
     >
       <div className="h-full">
         <ResponsiveContainer width="100%" height="100%">
@@ -43,33 +33,23 @@ export default function CompletionByPriorityChart({
             <CartesianGrid {...CHART_CONFIG.grid} />
 
             <XAxis
-              dataKey="priority"
+              dataKey="name"
               tick={CHART_CONFIG.tick}
-              interval={0}
             />
 
             <YAxis
-              domain={[0, 100]}
+              allowDecimals={false}
               tick={CHART_CONFIG.tick}
-              tickFormatter={(v) => `${v}%`}
             />
 
-            <Tooltip
-              formatter={(v) => [`${v}%`, "Completion"]}
-            />
+            <Tooltip />
 
             <Bar
-              dataKey="rate"
+              dataKey="value"
+              fill="#5B5FEF"
               radius={CHART_CONFIG.bar.radius}
               animationDuration={CHART_CONFIG.animation.duration}
-            >
-              {data.map((_, i) => (
-                <Cell
-                  key={i}
-                  fill={colors[i]}
-                />
-              ))}
-            </Bar>
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

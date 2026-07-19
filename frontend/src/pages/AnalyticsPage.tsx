@@ -4,7 +4,7 @@ import CreatedStatusChart from "../components/analytics/CreatedStatusChart";
 import WeeklyAssignedVsCreated from "../components/analytics/WeeklyAssignedVsCreated";
 import WeeklyProductivityChart from "../components/analytics/WeeklyProductivityChart";
 import CompletionByPriorityChart from "../components/analytics/CompletionByPriorityChart";
-import PriorityChart from "../components/dashboard/PriorityChart";
+import PriorityChart from "../components/analytics/PriorityChart";
 
 import useAnalytics from "../hooks/useAnalytics";
 
