@@ -122,7 +122,7 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                   space-y-5
                 "
       >
-        <h2 className="text-2xl font-bold tracking-tight">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
           {isEdit ? "Edit Task" : "Create Task"}
         </h2>
 
@@ -138,6 +138,12 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     dark:border-slate-700
                     bg-slate-50
                     dark:bg-slate-800
+                    text-slate-900
+                    dark:text-white
+                    placeholder:text-slate-400
+                    dark:placeholder:text-slate-500
+                    caret-slate-900
+                    dark:caret-white
                     px-4
                     py-3
                     transition
@@ -145,7 +151,7 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     focus:ring-2
                     focus:ring-primary/20
                     focus:border-primary
-                  "
+                    "
         />
 
         {/* DESCRIPTION */}
@@ -160,6 +166,12 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     dark:border-slate-700
                     bg-slate-50
                     dark:bg-slate-800
+                    text-slate-900
+                    dark:text-white
+                    placeholder:text-slate-400
+                    dark:placeholder:text-slate-500
+                    caret-slate-900
+                    dark:caret-white
                     px-4
                     py-3
                     transition
@@ -167,7 +179,7 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     focus:ring-2
                     focus:ring-primary/20
                     focus:border-primary
-                  "
+                    "
         />
 
         {/* DUE DATE + TIME */}
@@ -182,6 +194,11 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     dark:border-slate-700
                     bg-slate-50
                     dark:bg-slate-800
+                    text-slate-900
+                    dark:text-white
+                    dark:[color-scheme:dark]
+                    caret-slate-900
+                    dark:caret-white
                     px-4
                     py-3
                     transition
@@ -189,7 +206,7 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     focus:ring-2
                     focus:ring-primary/20
                     focus:border-primary
-                  "
+                    "
         />
 
         {/* PRIORITY */}
@@ -203,6 +220,9 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     dark:border-slate-700
                     bg-slate-50
                     dark:bg-slate-800
+                    text-slate-900
+                    dark:text-white
+                    dark:[color-scheme:dark]
                     px-4
                     py-3
                     transition
@@ -210,7 +230,7 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     focus:ring-2
                     focus:ring-primary/20
                     focus:border-primary
-                  "
+                    "
         >
           <option value="LOW">Low</option>
           <option value="MEDIUM">Medium</option>
@@ -229,6 +249,9 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     dark:border-slate-700
                     bg-slate-50
                     dark:bg-slate-800
+                    text-slate-900
+                    dark:text-white
+                    dark:[color-scheme:dark]
                     px-4
                     py-3
                     transition
@@ -236,7 +259,7 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
                     focus:ring-2
                     focus:ring-primary/20
                     focus:border-primary
-                  "
+                    "
         >
           <option value="">Unassigned</option>
           {users.map((u: any) => (
@@ -260,6 +283,8 @@ const CreateTaskModal = ({ onClose, task }: Props) => {
         dark:border-slate-700
         bg-white
         dark:bg-slate-800
+        text-slate-700
+        dark:text-slate-200
         hover:bg-slate-50
         dark:hover:bg-slate-700
         transition
